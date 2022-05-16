@@ -12,6 +12,9 @@ class Users(models.Model):
     svd = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.username
+
 
 class Devices(models.Model):
     users = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -20,6 +23,10 @@ class Devices(models.Model):
     state = models.CharField(max_length=30, default='In warehouse')
     purchase_date = models.DateTimeField('date purchased')
     warranty = models.DateTimeField('warranty end')
+    node_id = models.CharField(max_length=50, unique=True, default='None')
+
+    def __str__(self):
+        return self.node_id
 
 
 class Tickets(models.Model):
@@ -30,6 +37,9 @@ class Tickets(models.Model):
     ticket_number = models.IntegerField(default=random.randint(1, 100), unique=True)
     state = models.CharField(max_length=20, default='Open')
     description = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.ticket_number
 
 
 
