@@ -1,2 +1,2 @@
-# issue_tracking_project
+# Issue tracking project
 An issue tracking system in Python
