@@ -9,3 +9,11 @@
 #   5. Filtering tickets
 #   6. KB system?
 
+
+# Add device to DB:
+# device = Devices(users=Users.objects.get(username="asd"), owner="asd", purchase_date=timezone.now(), warranty=timezone.now(), node_id="xyz")
+#device.save()
+
+
+
+
