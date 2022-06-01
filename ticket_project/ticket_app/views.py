@@ -15,11 +15,12 @@ def test(request):
     }
     return HttpResponse(template.render(context, request))
 
-def ticket(request):
-    tickets = Tickets.objects.order_by('id')
+def ticket(request, ticket_id):
+    """Open ticket where ticket_id is the Ticket.id from the DB"""
+    ticket_id = int(ticket_id)
+    tickets = Tickets.objects.get(pk=ticket_id)
     template = loader.get_template('ticket_app/ticket.html')
     context = {
-        'tickets': tickets[0],
+        'tickets': tickets,
     }
-    print(tickets[0].users)
     return HttpResponse(template.render(context, request))
