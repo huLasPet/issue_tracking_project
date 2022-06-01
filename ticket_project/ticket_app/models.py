@@ -34,12 +34,11 @@ class Tickets(models.Model):
     affected_user = models.CharField(max_length=200)
     assigned_user = models.CharField(max_length=200)
     assigned_svd = models.CharField(max_length=200)
-    ticket_number = models.IntegerField(unique=True)
     state = models.CharField(max_length=20, default='Open')
     description = models.CharField(max_length=100000)
 
     def __int__(self):
-        return self.ticket_number
+        return self.id
 
 
 
