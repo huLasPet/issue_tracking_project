@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from .models import Users, Tickets, Devices
@@ -18,9 +18,10 @@ def test(request):
 def ticket(request, ticket_id):
     """Open ticket where ticket_id is the Ticket.id from the DB"""
     ticket_id = int(ticket_id)
-    tickets = Tickets.objects.get(pk=ticket_id)
-    template = loader.get_template('ticket_app/ticket.html')
-    context = {
-        'tickets': tickets,
-    }
-    return HttpResponse(template.render(context, request))
+    tickets = get_object_or_404(Tickets, pk=ticket_id)
+    print(request.POST["assigned_user"])
+    print(request.POST["affected_user"])
+    print(request.POST["assigned_svd"])
+    print(request.POST["description"])
+    return render(request, 'ticket_app/ticket.html', {'tickets': tickets})
+

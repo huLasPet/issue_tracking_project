@@ -5,16 +5,25 @@
     <title>Ticket</title>
 </head>
 <body>
-{{ tickets.id }} - {{ tickets.state }}
-<br>
-{{ tickets.assigned_user }}
-<br>
-{{ tickets.affected_user }}
-<br>
-{{ tickets.assigned_svd }}
-<br>
-{{ tickets.description }}
-<br>
+<form action="{% url 'ticket_app:ticket' tickets.id %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>Ticket number: {{ tickets.id }} - Status: {{ tickets.state }}</h1></legend>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <br>
+        <input type="text" value="{{ tickets.assigned_user }}" name="assigned_user">
+        <br>
+        <input type="text" value="{{ tickets.affected_user }}" name="affected_user">
+        <br>
+        <input type="text" value="{{ tickets.assigned_svd }}" name="assigned_svd">
+        <br>
+        <input type="text" value="{{ tickets.description }}" name="description">
+        <br>
+    </fieldset>
+    <input type="submit" value="Submit">
+</form>
+
+
 
 </body>
 </html>
