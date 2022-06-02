@@ -16,12 +16,18 @@ def test(request):
     return HttpResponse(template.render(context, request))
 
 def ticket(request, ticket_id):
-    """Open ticket where ticket_id is the Ticket.id from the DB"""
+    """Open ticket where ticket_id is the Ticket.id from the DB
+    Get data back to update the DB."""
     ticket_id = int(ticket_id)
     tickets = get_object_or_404(Tickets, pk=ticket_id)
-    print(request.POST["assigned_user"])
-    print(request.POST["affected_user"])
-    print(request.POST["assigned_svd"])
-    print(request.POST["description"])
-    return render(request, 'ticket_app/ticket.html', {'tickets': tickets})
+    devices = get_object_or_404(Devices, users__username=tickets.users)
+    if request.method == "POST":
+        tickets.affected_user = request.POST["affected_user"]
+        devices.node_id = request.POST["node_id"]
+        tickets.assigned_user = request.POST["assigned_user"]
+        tickets.assigned_svd = request.POST["assigned_svd"]
+        tickets.description = request.POST["description"]
+        tickets.save()
+        devices.save()
+    return render(request, 'ticket_app/ticket.html', {'tickets': tickets, 'devices': devices})
 

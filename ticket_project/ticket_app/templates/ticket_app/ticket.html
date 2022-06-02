@@ -10,20 +10,30 @@
     <fieldset>
         <legend><h1>Ticket number: {{ tickets.id }} - Status: {{ tickets.state }}</h1></legend>
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        <br>
-        <input type="text" value="{{ tickets.assigned_user }}" name="assigned_user">
-        <br>
-        <input type="text" value="{{ tickets.affected_user }}" name="affected_user">
-        <br>
-        <input type="text" value="{{ tickets.assigned_svd }}" name="assigned_svd">
-        <br>
-        <input type="text" value="{{ tickets.description }}" name="description">
-        <br>
+        <table>
+            <tbody>
+            <tr>
+                <td>Affected user: </td><td><input type="text" value="{{ tickets.affected_user }}" name="affected_user"></td>
+            </tr>
+            <tr>
+                <td>Device ID: </td><td><input type="text" value="{{ devices }}" name="node_id"></td>
+            </tr>
+            <tr>
+                <td>Assigned user: </td><td><input type="text" value="{{ tickets.assigned_user }}" name="assigned_user"></td>
+            </tr>
+            <tr>
+                <td>Assigned SVD: </td><td><input type="text" value="{{ tickets.assigned_svd }}" name="assigned_svd"></td>
+            </tr>
+            <tr>
+                <td>Description: </td><td><textarea rows="6" cols="80" name="description">{{ tickets.description }}</textarea></td>
+            </tr>
+            </tbody>
+        </table>
     </fieldset>
     <input type="submit" value="Submit">
 </form>
-
-
-
 </body>
 </html>
+
+
+
