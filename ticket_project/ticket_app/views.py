@@ -7,11 +7,11 @@ from .models import Users, Tickets, Devices
 def index(request):
     return HttpResponse("Startpage for the issue tracker.")
 
-def test(request):
-    users = Users.objects.order_by('id')
+def all_tickets(request):
+    tickets = Tickets.objects.order_by('id')
     template = loader.get_template('ticket_app/test.html')
     context = {
-        'users': users,
+        'tickets': tickets,
     }
     return HttpResponse(template.render(context, request))
 
