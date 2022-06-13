@@ -27,6 +27,17 @@
             <tr>
                 <td>Description: </td><td><textarea rows="6" cols="80" name="description">{{ tickets.description }}</textarea></td>
             </tr>
+            <tr>
+                <td>State: </td><td><select name="state">
+                {% if tickets.state == "Open" %}
+                <option value="Open" selected>{{ tickets.state }}</option>
+                <option value="Closed">Closed</option>
+                {% else %}
+                <option value="Closed" selected>{{ tickets.state }}</option>
+                <option value="Open">Open</option>
+                {% endif %}
+                </select></td>
+            </tr>
             </tbody>
         </table>
     </fieldset>

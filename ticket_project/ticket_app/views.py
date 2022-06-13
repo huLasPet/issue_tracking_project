@@ -9,7 +9,7 @@ def index(request):
 
 def all_tickets(request):
     tickets = Tickets.objects.order_by('id')
-    template = loader.get_template('ticket_app/test.html')
+    template = loader.get_template('ticket_app/all.html')
     context = {
         'tickets': tickets,
     }
@@ -27,6 +27,7 @@ def ticket(request, ticket_id):
         tickets.assigned_user = request.POST["assigned_user"]
         tickets.assigned_svd = request.POST["assigned_svd"]
         tickets.description = request.POST["description"]
+        tickets.state = request.POST["state"]
         tickets.save()
         devices.save()
     return render(request, 'ticket_app/ticket.html', {'tickets': tickets, 'devices': devices})
