@@ -9,14 +9,16 @@
     {% csrf_token %}
     <fieldset>
         <legend><h1>Ticket number: {{ tickets.id }} - Status: {{ tickets.state }}</h1></legend>
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+        {% endif %}
         <table>
             <tbody>
             <tr>
                 <td>Affected user: </td><td><input type="text" value="{{ tickets.affected_user }}" name="affected_user"></td>
             </tr>
             <tr>
-                <td>Device ID: </td><td><input type="text" value="{{ devices }}" name="node_id"></td>
+                <td>Device ID: </td><td><input type="text" value="{{ tickets.affected_device }}" name="affected_device"></td>
             </tr>
             <tr>
                 <td>Assigned user: </td><td><input type="text" value="{{ tickets.assigned_user }}" name="assigned_user"></td>

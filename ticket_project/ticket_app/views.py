@@ -23,12 +23,11 @@ def ticket(request, ticket_id):
     devices = get_object_or_404(Devices, users__username=tickets.users)
     if request.method == "POST":
         tickets.affected_user = request.POST["affected_user"]
-        devices.node_id = request.POST["node_id"]
+        tickets.affected_device = request.POST["affected_device"]
         tickets.assigned_user = request.POST["assigned_user"]
         tickets.assigned_svd = request.POST["assigned_svd"]
         tickets.description = request.POST["description"]
         tickets.state = request.POST["state"]
         tickets.save()
-        devices.save()
     return render(request, 'ticket_app/ticket.html', {'tickets': tickets, 'devices': devices})
 

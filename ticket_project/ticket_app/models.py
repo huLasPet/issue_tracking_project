@@ -55,6 +55,7 @@ class Tickets(models.Model):
     assigned_svd = models.CharField(max_length=200)
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default=STATE_OPEN)
     description = models.CharField(max_length=100000)
+    affected_device = models.CharField(max_length=200, default="")
 
     def __int__(self):
         return self.id
