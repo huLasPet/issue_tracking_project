@@ -7,7 +7,7 @@ from django.db import models
 class Users(models.Model):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
-    middle_name = models.CharField(max_length=200)
+    middle_name = models.CharField(max_length=200, blank=True)
     creation_date = models.DateTimeField('date created')
     username = models.CharField(max_length=200, unique=True)
     svd = models.CharField(max_length=200)
