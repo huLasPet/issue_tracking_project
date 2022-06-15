@@ -6,7 +6,7 @@ from .models import Users, Tickets, Devices
 
 
 def index(request):
-    return HttpResponse("Startpage for the issue tracker.")
+    return render(request, 'ticket_app/index.html')
 
 
 def all_tickets(request):
