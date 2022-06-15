@@ -1,30 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+.open_table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+
+}
+
+.open_header, .open_tickets {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  text-align: center;
+}
+
+</style>
 <head>
     <meta charset="UTF-8">
     <title>All open tickets</title>
 </head>
 <body>
-{% if tickets %}
-<ul>
-    {% for ticket in tickets %}
-    {% if ticket.state != "Closed" %}
-    <li>Ticket number: {{ ticket.id }} - Affected user: {{ ticket.affected_user }} - Description: {{ ticket.description }} - State: {{ ticket.state}}</li>
+    <h1>Open tickets:</h1>
+    {% if tickets %}
+        <table class="open_table">
+            <tr>
+                <th class="open_header">Ticket number</th>
+                <th class="open_header">Affected user</th>
+                <th class="open_header">Description</th>
+                <th class="open_header">Assigned user</th>
+                <th class="open_header">Assigned SVD</th>
+            </tr>
+            {% for ticket in tickets %}
+            {% if ticket.state != "Closed" %}
+            <tr>
+                <td class="open_tickets"><a href="/ticket/{{ ticket.id }}">{{ ticket.id }}</a></td>
+                <td class="open_tickets">{{ ticket.affected_user }}</td>
+                <td class="open_tickets">{{ ticket.description }}</td>
+                <td class="open_tickets">{{ ticket.assigned_user }}</td>
+                <td class="open_tickets">{{ ticket.assigned_svd }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No tickets are open.</p>
     {% endif %}
-    {% endfor %}
-
-</ul>
-
-<select name="state">
-    {% for ticket in tickets %}
-    <option value="Open" selected>{{ ticket.id }}</option>
-    <option value="Closed">Closed</option>
-    {% endfor %}
-</select>
-
-
-{% else %}
-<p>No tickets are open.</p>
-{% endif %}
 </body>
 </html>
