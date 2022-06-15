@@ -5,7 +5,7 @@
     <title>Ticket</title>
 </head>
 <body>
-<a href="/all">Back to all open tickets</a>
+<a href="/all_tickets">Back to all open tickets</a>
 <form action="{% url 'ticket_app:ticket' tickets.id %}" method="post">
     {% csrf_token %}
     <fieldset>

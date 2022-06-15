@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+.open_table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+
+}
+
+.open_header, .active_users {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  text-align: center;
+}
+
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>All active users</title>
+</head>
+<body>
+<a href="/">Index</a>
+    <h1>Active users</h1>
+    {% if users %}
+    <table class="open_table">
+        <tr>
+            <th class="open_header">Username</th>
+            <th class="open_header">First name</th>
+            <th class="open_header">Middle name</th>
+            <th class="open_header">Last name</th>
+            <th class="open_header">SVD</th>
+            <th class="open_header">Role</th>
+
+        </tr>
+        {% for user in users %}
+        {% if user.active != "False" %}
+        <tr>
+            <td class="active_users">{{ user.username }}</td>
+            <td class="active_users">{{ user.first_name }}</td>
+            <td class="active_users">{{ user.middle_name }}</td>
+            <td class="active_users">{{ user.last_name }}</td>
+            <td class="active_users">{{ user.svd }}</td>
+            <td class="active_users">{{ user.title }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No active users.</p>
+    {% endif %}
+</body>
+</html>

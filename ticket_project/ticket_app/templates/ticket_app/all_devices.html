@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+.open_table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+
+}
+
+.open_header, .active_devices {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  text-align: center;
+}
+
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>All active devices</title>
+</head>
+<body>
+<a href="/">Index</a>
+    <h1>Active devices</h1>
+    {% if devices %}
+    <table class="open_table">
+        <tr>
+            <th class="open_header">Device ID</th>
+            <th class="open_header">Device nodename</th>
+            <th class="open_header">Device type</th>
+            <th class="open_header">Purchase date</th>
+            <th class="open_header">Warranty end</th>
+            <th class="open_header">State</th>
+            <th class="open_header">Owner</th>
+        </tr>
+        {% for device in devices %}
+        {% if device.state != "Decomissioned" %}
+        <tr>
+            <td class="active_devices">{{ device.id }}</td>
+            <td class="active_devices">{{ device.node_id }}</td>
+            <td class="active_devices">{{ device.device_type }}</td>
+            <td class="active_devices">{{ device.purchase_date }}</td>
+            <td class="active_devices">{{ device.warranty }}</td>
+            <td class="active_devices">{{ device.state }}</td>
+            <td class="active_devices">{{ device.owner }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No active devices.</p>
+    {% endif %}
+</body>
+</html>

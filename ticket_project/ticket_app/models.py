@@ -12,6 +12,7 @@ class Users(models.Model):
     username = models.CharField(max_length=200, unique=True)
     svd = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.username
@@ -38,7 +39,7 @@ class Devices(models.Model):
     state = models.CharField(max_length=30, choices=STATE_CHOICES, default=STATE_WH)
     purchase_date = models.DateTimeField('date purchased')
     warranty = models.DateTimeField('warranty end')
-    node_id = models.CharField(max_length=50, unique=True, default='None')
+    node_id = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.node_id
