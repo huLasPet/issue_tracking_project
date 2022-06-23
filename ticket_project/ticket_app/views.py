@@ -26,7 +26,7 @@ def all_devices(request):
     return HttpResponse(template.render(context, request))
 
 def all_users(request):
-    users = Users.objects.order_by('id')
+    users = Users.objects.filter(is_superuser=0)
     template = loader.get_template('ticket_app/all_users.html')
     context = {
         'users': users,
@@ -42,7 +42,7 @@ def ticket(request, ticket_id):
     ticket_id = int(ticket_id)
     tickets = get_object_or_404(Tickets, pk=ticket_id)
     devices = Devices.objects.filter(users__username=tickets.affected_user)
-    users = Users.objects.order_by('username')
+    users = Users.objects.filter(is_superuser=0)
     if request.method == "POST":
         tickets.affected_user = request.POST["affected_user"]
         tickets.affected_device = request.POST["affected_device"]
