@@ -36,7 +36,7 @@
 
         </tr>
         {% for user in users %}
-        {% if user.active != "False" %}
+        {% if user.is_active != 0 %}
         <tr>
             <td class="active_users">{{ user.username }}</td>
             <td class="active_users">{{ user.first_name }}</td>

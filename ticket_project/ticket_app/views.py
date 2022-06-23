@@ -34,7 +34,6 @@ def all_users(request):
     return HttpResponse(template.render(context, request))
 
 
-
 def ticket(request, ticket_id):
     #Try to add action history, one big string with something static to separate actions and use regex to list them
     #separately later

@@ -1,18 +1,18 @@
-import random
+from datetime import timezone
 
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 # Create your models here.
-class Users(models.Model):
+class Users(AbstractUser):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     middle_name = models.CharField(max_length=200, blank=True)
-    creation_date = models.DateTimeField('date created')
+    creation_date = models.DateTimeField('date created', default="1900-01-01")
     username = models.CharField(max_length=200, unique=True)
     svd = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
-    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.username
