@@ -1,14 +1,18 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
+from django.contrib.auth import authenticate, login, logout
 from .models import Users, Tickets, Devices
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
+@login_required
 def index(request):
     return render(request, 'ticket_app/index.html')
 
 
+@login_required
 def all_tickets(request):
     tickets = Tickets.objects.order_by('id')
     template = loader.get_template('ticket_app/all_tickets.html')
@@ -17,6 +21,8 @@ def all_tickets(request):
     }
     return HttpResponse(template.render(context, request))
 
+
+@login_required
 def all_devices(request):
     devices = Devices.objects.order_by('id')
     template = loader.get_template('ticket_app/all_devices.html')
@@ -25,6 +31,8 @@ def all_devices(request):
     }
     return HttpResponse(template.render(context, request))
 
+
+@login_required
 def all_users(request):
     users = Users.objects.filter(is_superuser=0)
     template = loader.get_template('ticket_app/all_users.html')
@@ -34,6 +42,7 @@ def all_users(request):
     return HttpResponse(template.render(context, request))
 
 
+@login_required
 def ticket(request, ticket_id):
     #Try to add action history, one big string with something static to separate actions and use regex to list them
     #separately later
