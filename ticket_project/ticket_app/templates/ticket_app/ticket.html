@@ -6,6 +6,8 @@
 </head>
 <body>
 <a href="/all_tickets">Back to all open tickets</a>
+<h5>Logged in as {{ user.username }} - <a href="{% url 'logout' %}">Log Out</a></h5>
+
 <form action="{% url 'ticket_app:ticket' tickets.id %}" method="post">
     {% csrf_token %}
     <fieldset>
