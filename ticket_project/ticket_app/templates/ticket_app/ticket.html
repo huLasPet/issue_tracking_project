@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ticket</title>
-</head>
-<body>
-<a href="/all_tickets">Back to all open tickets</a>
-<h5>Logged in as {{ user.username }} - <a href="{% url 'logout' %}">Log Out</a></h5>
+{% extends "./base.html" %}
 
+{% block title %}Index{% endblock title %}
+
+{% block content %}
 <form action="{% url 'ticket_app:ticket' tickets.id %}" method="post">
     {% csrf_token %}
     <fieldset>
@@ -16,7 +10,7 @@
         {% if error_message %}
         <p><strong>{{ error_message }}</strong></p>
         {% endif %}
-        <table>
+        <table class="table table-borderless">
             <tbody>
             <tr>
                 <td>Affected user: </td>
@@ -24,6 +18,7 @@
                     <option value={{ tickets.affected_user }}>{{ tickets.affected_user }}</option>
                     <option value={{ tickets.affected_user }}>----</option>
                     {% for user in users %}
+
                     <option value={{ user }}>{{ user }}</option>
                     {% endfor %}
                 </select>
@@ -57,7 +52,8 @@
                 </td>
             </tr>
             <tr>
-                <td>Description: </td><td><textarea rows="6" cols="80" name="description">{{ tickets.description }}</textarea></td>
+                <td>Description: </td>
+                <td><textarea rows="6" cols="120" name="description">{{ tickets.description }}</textarea></td>
             </tr>
             <tr>
                 <td>State: </td><td><select name="state">
@@ -75,8 +71,8 @@
     </fieldset>
     <input type="submit" value="Submit">
 </form>
-</body>
-</html>
+
+{% endblock content %}
 
 
 

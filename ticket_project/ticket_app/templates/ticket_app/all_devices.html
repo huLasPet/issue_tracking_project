@@ -1,34 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<style>
-.open_table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+{% extends "./base.html" %}
+{% block title %}All devices{% endblock title %}
 
-}
+{% block content %}
 
-.open_header, .active_devices {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-  text-align: center;
-}
-
-</style>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>All active devices</title>
-</head>
-<body>
-<a href="/">Index</a>
-<h5>Logged in as {{ user.username }} - <a href="{% url 'logout' %}">Log Out</a></h5>
-
-    <h1>Active devices</h1>
+<h1>Active devices</h1>
     {% if devices %}
-    <table class="open_table">
+    <table class="open_table table table-striped">
         <tr>
             <th class="open_header">Device ID</th>
             <th class="open_header">Device nodename</th>
@@ -55,5 +32,5 @@
     {% else %}
     <p>No active devices.</p>
     {% endif %}
-</body>
-</html>
+
+{% endblock content %}
