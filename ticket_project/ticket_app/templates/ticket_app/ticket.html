@@ -3,6 +3,8 @@
 {% block title %}Index{% endblock title %}
 
 {% block content %}
+
+Rework this based on https://getbootstrap.com/docs/5.2/forms/layout/
 <form action="{% url 'ticket_app:ticket' tickets.id %}" method="post">
     {% csrf_token %}
     <fieldset>
