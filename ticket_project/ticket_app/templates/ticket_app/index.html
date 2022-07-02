@@ -5,9 +5,9 @@
 {% block content %}
 
 
-<div class="row">
+<div class="row row-cols-1 row-cols-md-3 g-4">
     <div class="col-sm-4">
-        <div class="card">
+        <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title">{{ open_tickets_count }}</h5>
                 <p class="card-text">Currently open tickets.</p>
@@ -16,25 +16,16 @@
         </div>
     </div>
     <div class="col-sm-4">
-        <div class="card">
+        <div class="card text-center text-bg-warning">
             <div class="card-body">
                 <h5 class="card-title">{{ older_tickets_count }}</h5>
                 <p class="card-text">Tickets older than 7 days.</p>
-                <a href="/old_tickets" class="btn btn-primary">Check tickets</a>
+                <a href="/old_tickets" class="btn btn-danger">Check tickets</a>
             </div>
         </div>
     </div>
     <div class="col-sm-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ old_devices_count }}</h5>
-                <p class="card-text">Devices with less than 30 days of warranty.</p>
-                <a href="/short_warranty" class="btn btn-primary">Check devices</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="card">
+        <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title">{{ my_tickets_count }}</h5>
                 <p class="card-text">Tickets assigned to me.</p>
@@ -42,6 +33,16 @@
             </div>
         </div>
     </div>
+    <div class="col-sm-4">
+        <div class="card text-center text-bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">{{ old_devices_count }}</h5>
+                <p class="card-text">Devices with less than 30 days of warranty.</p>
+                <a href="/short_warranty" class="btn btn-danger">Check devices</a>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 
