@@ -1,4 +1,4 @@
-from datetime import timezone
+from datetime import datetime, timedelta
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -37,8 +37,8 @@ class Devices(models.Model):
     owner = models.CharField(max_length=200)
     device_type = models.CharField(max_length=200, choices=TYPE_CHOICE)
     state = models.CharField(max_length=30, choices=STATE_CHOICES, default=STATE_WH)
-    purchase_date = models.DateTimeField('date purchased')
-    warranty = models.DateTimeField('warranty end')
+    purchase_date = models.DateTimeField('date purchased', default=datetime.now())
+    warranty = models.DateTimeField('warranty end', default=(datetime.now() + timedelta(days=3*365)))
     node_id = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
@@ -57,6 +57,8 @@ class Tickets(models.Model):
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default=STATE_OPEN)
     description = models.CharField(max_length=100000)
     affected_device = models.CharField(max_length=200, default="")
+    opening_date = models.DateTimeField('opening date', default=datetime.now())
 
-    def __int__(self):
+
+def __int__(self):
         return self.id

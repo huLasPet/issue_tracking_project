@@ -4,12 +4,26 @@ from django.template import loader
 from django.contrib.auth import authenticate, login, logout
 from .models import Users, Tickets, Devices
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, timedelta
+
+
 # Create your views here.
 
 
 @login_required
 def index(request):
-    return render(request, 'ticket_app/index.html')
+    open_tickets_count = Tickets.objects.filter(state='Open').count()
+    older_tickets_count = Tickets.objects.exclude(opening_date__gt=(datetime.now() - timedelta(days=7))).count()
+    old_devices_count = Devices.objects.exclude(warranty__gt=(datetime.now() + timedelta(days=30))).count()
+    my_tickets_count = Tickets.objects.filter(assigned_user=request.user).count()
+    template = loader.get_template('ticket_app/index.html')
+    context = {
+        'open_tickets_count': open_tickets_count,
+        'older_tickets_count': older_tickets_count,
+        'old_devices_count': old_devices_count,
+        'my_tickets_count': my_tickets_count,
+    }
+    return HttpResponse(template.render(context, request))
 
 
 @login_required
@@ -23,11 +37,48 @@ def all_tickets(request):
 
 
 @login_required
+def old_tickets(request):
+    """Show tickets older than 7 days"""
+    older_tickets = Tickets.objects.exclude(opening_date__gt=(datetime.now() - timedelta(days=7)))
+    template = loader.get_template('ticket_app/all_tickets.html')
+    context = {
+        'tickets': older_tickets,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def open_new_ticket(request):
+    pass
+
+
+@login_required
+def my_open_tickets(request):
+    my_tickets = Tickets.objects.filter(assigned_user=request.user)
+    template = loader.get_template('ticket_app/all_tickets.html')
+    context = {
+    'tickets': my_tickets,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+
+@login_required
 def all_devices(request):
     devices = Devices.objects.order_by('id')
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
         'devices': devices,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def short_warranty(request):
+    old_devices = Devices.objects.exclude(warranty__gt=(datetime.now() + timedelta(days=30)))
+    template = loader.get_template('ticket_app/all_devices.html')
+    context = {
+        'devices': old_devices,
     }
     return HttpResponse(template.render(context, request))
 
@@ -44,8 +95,8 @@ def all_users(request):
 
 @login_required
 def ticket(request, ticket_id):
-    #Try to add action history, one big string with something static to separate actions and use regex to list them
-    #separately later
+    # Try to add action history, one big string with something static to separate actions and use regex to list them
+    # separately later
     """Open ticket where ticket_id is the Ticket.id from the DB
     Get data back to update the DB, refresh the page."""
     ticket_id = int(ticket_id)
@@ -62,4 +113,3 @@ def ticket(request, ticket_id):
         tickets.save()
         return HttpResponseRedirect(f'/ticket/{ticket_id}', {'tickets': tickets, 'devices': devices, 'users': users})
     return render(request, 'ticket_app/ticket.html', {'tickets': tickets, 'devices': devices, 'users': users})
-

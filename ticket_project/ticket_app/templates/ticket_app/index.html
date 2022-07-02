@@ -4,7 +4,45 @@
 
 {% block content %}
 
-<h2>Content for My App</h2>
-<p>Stuff etc etc.</p>
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ open_tickets_count }}</h5>
+                <p class="card-text">Currently open tickets.</p>
+                <a href="/all_tickets" class="btn btn-primary">Check tickets</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ older_tickets_count }}</h5>
+                <p class="card-text">Tickets older than 7 days.</p>
+                <a href="/old_tickets" class="btn btn-primary">Check tickets</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ old_devices_count }}</h5>
+                <p class="card-text">Devices with less than 30 days of warranty.</p>
+                <a href="/short_warranty" class="btn btn-primary">Check devices</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ my_tickets_count }}</h5>
+                <p class="card-text">Tickets assigned to me.</p>
+                <a href="/my_open_tickets" class="btn btn-primary">Check tickets</a>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 {% endblock content %}
