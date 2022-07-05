@@ -1,13 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from django.contrib.auth import authenticate, login, logout
 from .models import Users, Tickets, Devices
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 
 
 # Create your views here.
+
+#REMOVE DUPLICATES WHEN ALL VIEWS ARE DONE
 
 
 @login_required
@@ -49,7 +50,29 @@ def old_tickets(request):
 
 @login_required
 def open_new_ticket(request):
-    pass
+    tickets = Tickets.objects.all()
+    devices = Devices.objects.all()
+    users = Users.objects.filter(is_superuser=0)
+    template = loader.get_template('ticket_app/new_ticket.html')
+    context = {
+        'tickets': tickets,
+        'devices': devices,
+        'users': users,
+    }
+    if request.method == "POST":
+        user = Users.objects.filter(username=request.POST["affected_user"])
+        new_ticket = Tickets(affected_user=request.POST["affected_user"],
+                             affected_device=request.POST["affected_device"],
+                             assigned_user=request.POST["assigned_user"],
+                             assigned_svd=request.POST["assigned_svd"],
+                             description=request.POST["description"],
+                             state=request.POST["state"],
+                             users_id=user[0].id)
+
+        new_ticket.save()
+        return HttpResponseRedirect("/")
+    return HttpResponse(template.render(context, request))
+
 
 
 @login_required
@@ -103,6 +126,9 @@ def ticket(request, ticket_id):
     tickets = get_object_or_404(Tickets, pk=ticket_id)
     devices = Devices.objects.filter(users__username=tickets.affected_user)
     users = Users.objects.filter(is_superuser=0)
+    context = {'tickets': tickets,
+                'devices': devices,
+                'users': users}
     if request.method == "POST":
         tickets.affected_user = request.POST["affected_user"]
         tickets.affected_device = request.POST["affected_device"]
@@ -111,5 +137,5 @@ def ticket(request, ticket_id):
         tickets.description = request.POST["description"]
         tickets.state = request.POST["state"]
         tickets.save()
-        return HttpResponseRedirect(f'/ticket/{ticket_id}', {'tickets': tickets, 'devices': devices, 'users': users})
-    return render(request, 'ticket_app/ticket.html', {'tickets': tickets, 'devices': devices, 'users': users})
+        return HttpResponseRedirect(f'/ticket/{ticket_id}', context)
+    return render(request, 'ticket_app/ticket.html', context)

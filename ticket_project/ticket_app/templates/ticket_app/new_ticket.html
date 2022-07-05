@@ -1,0 +1,63 @@
+{% extends "./base.html" %}
+{% block title %}New ticket{% endblock title %}
+
+{% block content %}
+<form action="{% url 'ticket_app:open_new_ticket'%}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>Ticket number: - | Status: -</h1></legend>
+        {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+        {% endif %}
+        <table class="table table-borderless">
+            <tbody>
+            <tr>
+                <td>Affected user: </td>
+                <td><select name="affected_user">
+                    {% for user in users %}
+                    <option value={{ user }}>{{ user }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+                <td>Assigned user: </td>
+                <td><select name="assigned_user">
+                    {% for user in users %}
+                    <option value={{ user }}>{{ user }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Device ID: </td>
+                <td><select name="affected_device">
+                    {% for device in devices %}
+                    <option value={{ device }} selected>{{ device }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+                <td>Assigned SVD: </td>
+                <td><select name="assigned_svd">
+                    {% for user in users %}
+                    <option value={{ user.svd }}>{{ user.svd }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Description: </td>
+                <td><textarea rows="6" cols="120" name="description">{{ tickets.description }}</textarea></td>
+            </tr>
+            <tr>
+                <td>State: </td>
+                <td><select name="state">
+                <option value="Open" selected>Open</option>
+                <option value="Closed">Closed</option>
+            </select></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock content %}
