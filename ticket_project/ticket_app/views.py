@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 # Create your views here.
 
-#REMOVE DUPLICATES WHEN ALL VIEWS ARE DONE
+# REMOVE DUPLICATES WHEN ALL VIEWS ARE DONE
 
 
 @login_required
@@ -49,41 +49,13 @@ def old_tickets(request):
 
 
 @login_required
-def open_new_ticket(request):
-    tickets = Tickets.objects.all()
-    devices = Devices.objects.all()
-    users = Users.objects.filter(is_superuser=0)
-    template = loader.get_template('ticket_app/new_ticket.html')
-    context = {
-        'tickets': tickets,
-        'devices': devices,
-        'users': users,
-    }
-    if request.method == "POST":
-        user = Users.objects.filter(username=request.POST["affected_user"])
-        new_ticket = Tickets(affected_user=request.POST["affected_user"],
-                             affected_device=request.POST["affected_device"],
-                             assigned_user=request.POST["assigned_user"],
-                             assigned_svd=request.POST["assigned_svd"],
-                             description=request.POST["description"],
-                             state=request.POST["state"],
-                             users_id=user[0].id)
-
-        new_ticket.save()
-        return HttpResponseRedirect("/")
-    return HttpResponse(template.render(context, request))
-
-
-
-@login_required
 def my_open_tickets(request):
     my_tickets = Tickets.objects.filter(assigned_user=request.user)
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
-    'tickets': my_tickets,
+        'tickets': my_tickets,
     }
     return HttpResponse(template.render(context, request))
-
 
 
 @login_required
@@ -98,6 +70,7 @@ def all_devices(request):
 
 @login_required
 def short_warranty(request):
+    """Display devices where the warranty is less than 30 days."""
     old_devices = Devices.objects.exclude(warranty__gt=(datetime.now() + timedelta(days=30)))
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
@@ -117,6 +90,34 @@ def all_users(request):
 
 
 @login_required
+def open_new_ticket(request):
+    """Open a new ticket, users_id is the ID of person who opened the ticket -
+     not necessarily the same as the assigned user. This is in order to track who opened the ticket."""
+    tickets = Tickets.objects.all()
+    devices = Devices.objects.all()
+    users = Users.objects.filter(is_superuser=0)
+    template = loader.get_template('ticket_app/new_ticket.html')
+    context = {
+        'tickets': tickets,
+        'devices': devices,
+        'users': users,
+    }
+    if request.method == "POST":
+        user = Users.objects.filter(username=request.user)
+        new_ticket = Tickets(affected_user=request.POST["affected_user"],
+                             affected_device=request.POST["affected_device"],
+                             assigned_user=request.POST["assigned_user"],
+                             assigned_svd=request.POST["assigned_svd"],
+                             description=request.POST["description"],
+                             state=request.POST["state"],
+                             users_id=user[0].id)
+
+        new_ticket.save()
+        return HttpResponseRedirect("/")
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
 def ticket(request, ticket_id):
     # Try to add action history, one big string with something static to separate actions and use regex to list them
     # separately later
@@ -127,8 +128,8 @@ def ticket(request, ticket_id):
     devices = Devices.objects.filter(users__username=tickets.affected_user)
     users = Users.objects.filter(is_superuser=0)
     context = {'tickets': tickets,
-                'devices': devices,
-                'users': users}
+               'devices': devices,
+               'users': users}
     if request.method == "POST":
         tickets.affected_user = request.POST["affected_user"]
         tickets.affected_device = request.POST["affected_device"]
