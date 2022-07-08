@@ -121,16 +121,26 @@ def open_new_ticket(request):
 def ticket(request, ticket_id):
     # Try to add action history, one big string with something static to separate actions and use regex to list them
     # separately later
-    """Open ticket where ticket_id is the Ticket.id from the DB
+    """Open ticket where ticket_id is the Ticket.id from the DB,
+    devices are the affected user's devices if there are any, No device otherwise,
+    svds are the all the SVDs without duplicates.
     Get data back to update the DB, refresh the page."""
     ticket_id = int(ticket_id)
     tickets = get_object_or_404(Tickets, pk=ticket_id)
     devices = Devices.objects.filter(users__username=tickets.affected_user)
+    if not devices:
+        devices = ["No device"]
     users = Users.objects.filter(is_superuser=0)
+    svds = []
+    for user in users:
+        if user.svd not in svds:
+            svds.append(user.svd)
     context = {'tickets': tickets,
                'devices': devices,
-               'users': users}
+               'users': users,
+               'svds': svds,}
     if request.method == "POST":
+        print("TEST2", request.POST["affected_device"])
         tickets.affected_user = request.POST["affected_user"]
         tickets.affected_device = request.POST["affected_device"]
         tickets.assigned_user = request.POST["assigned_user"]

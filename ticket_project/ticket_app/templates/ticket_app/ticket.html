@@ -4,7 +4,6 @@
 
 {% block content %}
 
-Rework this based on https://getbootstrap.com/docs/5.2/forms/layout/
 <form action="{% url 'ticket_app:ticket' tickets.id %}" method="post">
     {% csrf_token %}
     <fieldset>
@@ -47,8 +46,8 @@ Rework this based on https://getbootstrap.com/docs/5.2/forms/layout/
                 <td><select name="assigned_svd">
                     <option value={{ tickets.assigned_svd }}>{{ tickets.assigned_svd }}</option>
                     <option value={{ tickets.assigned_svd }}>----</option>
-                    {% for user in users %}
-                    <option value={{ user.svd }}>{{ user.svd }}</option>
+                    {% for svd in svds %}
+                    <option value={{ svd }}>{{ svd }}</option>
                     {% endfor %}
                 </select>
                 </td>
