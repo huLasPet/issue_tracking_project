@@ -14,57 +14,62 @@
         <table class="table table-borderless">
             <tbody>
             <tr>
-                <td>Affected user: </td>
-                <td><select name="affected_user">
-                    <option value={{ tickets.affected_user }}>{{ tickets.affected_user }}</option>
-                    <option value={{ tickets.affected_user }}>----</option>
-                    {% for user in users %}
+                <td>Affected user:</td>
+                <td><input class="form-control-sm" list="affected_user_list" name="affected_user"
+                           value="{{ tickets.affected_user }}">
+                    <datalist id="affected_user_list">
+                        {% for user in users %}
+                        <option value={{ user }}>
+                            {% endfor %}
+                    </datalist>
+                </td>
+                <td>Assigned user:</td>
+                <td><input class="form-control-sm" list="assigned_user_list" name="assigned_user"
+                           value="{{ tickets.assigned_user }}">
+                    <datalist id="assigned_user_list">
+                        {% for user in users %}
+                        <option value={{ user }}>
+                            {% endfor %}
+                    </datalist>
+                </td>
 
-                    <option value={{ user }}>{{ user }}</option>
-                    {% endfor %}
-                </select>
-                </td>
-                <td>Assigned user: </td>
-                <td><select name="assigned_user">
-                    <option value={{ tickets.assigned_user }}>{{ tickets.assigned_user }}</option>
-                    <option value={{ tickets.assigned_user }}>----</option>
-                    {% for user in users %}
-                    <option value={{ user }}>{{ user }}</option>
-                    {% endfor %}
-                </select>
-                </td>
             </tr>
             <tr>
-                <td>Device ID: </td>
-                <td><select name="affected_device">
-                {% for device in devices %}
-                <option value={{ device }} selected>{{ device }}</option>
-                {% endfor %}
-            </select>
+                <td>Device ID:</td>
+                <td><input class="form-control-sm" list="device_list" name="affected_device"
+                           value="{{ tickets.affected_device }}">
+                    <datalist id="device_list">
+                        {% for device in devices %}
+                        <option value={{ device }}>
+                            {% endfor %}
+                    </datalist>
                 </td>
-                <td>Assigned SVD: </td>
-                <td><select name="assigned_svd">
-                    <option value={{ tickets.assigned_svd }}>{{ tickets.assigned_svd }}</option>
-                    <option value={{ tickets.assigned_svd }}>----</option>
-                    {% for svd in svds %}
-                    <option value={{ svd }}>{{ svd }}</option>
-                    {% endfor %}
-                </select>
+                <td>Assigned SVD:</td>
+                <td><input class="form-control-sm" list="assigned_svd_list" name="assigned_svd"
+                           value="{{ tickets.assigned_svd }}">
+                    <datalist id="assigned_svd_list">
+                        {% for svd in svds %}
+                        <option value={{ svd }}>
+                            {% endfor %}
+                    </datalist>
                 </td>
             </tr>
+        </table>
+        <table class="table table-borderless">
             <tr>
-                <td>Description: </td>
-                <td><textarea rows="6" cols="120" name="description">{{ tickets.description }}</textarea></td>
+                <td>Description:</td>
+                <td><textarea rows="6" cols="126" name="description">{{ tickets.description }}</textarea></td>
             </tr>
             <tr>
-                <td>State: </td><td><select name="state">
-                {% if tickets.state == "Open" %}
-                <option value="Open" selected>{{ tickets.state }}</option>
-                <option value="Closed">Closed</option>
-                {% else %}
-                <option value="Closed" selected>{{ tickets.state }}</option>
-                <option value="Open">Open</option>
-                {% endif %}
+                <td>State:</td>
+                <td><select name="state">
+                    {% if tickets.state == "Open" %}
+                    <option value="Open" selected>{{ tickets.state }}</option>
+                    <option value="Closed">Closed</option>
+                    {% else %}
+                    <option value="Closed" selected>{{ tickets.state }}</option>
+                    <option value="Open">Open</option>
+                    {% endif %}
                 </select></td>
             </tr>
             </tbody>

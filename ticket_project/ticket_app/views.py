@@ -96,11 +96,16 @@ def open_new_ticket(request):
     tickets = Tickets.objects.all()
     devices = Devices.objects.all()
     users = Users.objects.filter(is_superuser=0)
+    svds = []
+    for user in users:
+        if user.svd not in svds:
+            svds.append(user.svd)
     template = loader.get_template('ticket_app/new_ticket.html')
     context = {
         'tickets': tickets,
         'devices': devices,
         'users': users,
+        'svds': svds
     }
     if request.method == "POST":
         user = Users.objects.filter(username=request.user)
@@ -138,9 +143,8 @@ def ticket(request, ticket_id):
     context = {'tickets': tickets,
                'devices': devices,
                'users': users,
-               'svds': svds,}
+               'svds': svds}
     if request.method == "POST":
-        print("TEST2", request.POST["affected_device"])
         tickets.affected_user = request.POST["affected_user"]
         tickets.affected_device = request.POST["affected_device"]
         tickets.assigned_user = request.POST["assigned_user"]
