@@ -164,6 +164,7 @@ def searchresultsview(request):
     template = loader.get_template('ticket_app/search.html')
     users_search = Users.objects.filter(username__iexact=search_term)
     ticket_search = Tickets.objects.filter(Q(id__iexact=search_term) | Q(description__icontains=search_term))
-    print(ticket_search)
+    device_search = Devices.objects.filter(node_id__iexact=search_term)
+    print(device_search)
     context = {'search_term': search_term}
     return HttpResponse(template.render(context, request))
