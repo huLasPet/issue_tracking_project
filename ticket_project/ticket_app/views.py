@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import Users, Tickets, Devices
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
+from django.db.models import Q
 
 
 # Create your views here.
@@ -137,6 +138,7 @@ def ticket(request, ticket_id):
         devices = ["No device"]
     users = Users.objects.filter(is_superuser=0)
     svds = []
+    template = loader.get_template('ticket_app/ticket.html')
     for user in users:
         if user.svd not in svds:
             svds.append(user.svd)
@@ -153,4 +155,15 @@ def ticket(request, ticket_id):
         tickets.state = request.POST["state"]
         tickets.save()
         return HttpResponseRedirect(f'/ticket/{ticket_id}', context)
-    return render(request, 'ticket_app/ticket.html', context)
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def searchresultsview(request):
+    search_term = request.POST["search"]
+    template = loader.get_template('ticket_app/search.html')
+    users_search = Users.objects.filter(username__iexact=search_term)
+    ticket_search = Tickets.objects.filter(Q(id__iexact=search_term) | Q(description__icontains=search_term))
+    print(ticket_search)
+    context = {'search_term': search_term}
+    return HttpResponse(template.render(context, request))

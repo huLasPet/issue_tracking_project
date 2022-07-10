@@ -17,31 +17,36 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" >Logged in as {{ user.username }} - ID:{{ user.id }}</a>
+
+        <form action="{% url 'ticket_app:search_results' %}" method="POST">
+            {% csrf_token %}
+            <input class="form-control me-2" name="search" type="text" placeholder="Search...">
+        </form>
+
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Placeholder text</h5>
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Logged in as {{ user.username }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{% url 'ticket_app:index' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/my_open_tickets">My tickets</a>
+                        <a class="nav-link" href="{% url 'ticket_app:my_open_tickets' %}">My tickets</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/open_new_ticket">Open new ticket</a>
+                        <a class="nav-link" href="{% url 'ticket_app:open_new_ticket' %}">Open new ticket</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown
+                            More
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
-                            <li><a class="dropdown-item" href="/all_tickets">All tickets</a></li>
-                            <li><a class="dropdown-item" href="all_devices">All devices</a></li>
-                            <li><a class="dropdown-item" href="all_users">All users</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ticket_app:all_tickets' %} ">All tickets</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ticket_app:all_devices' %}">All devices</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ticket_app:all_users' %}">All users</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -49,10 +54,6 @@
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </div>
