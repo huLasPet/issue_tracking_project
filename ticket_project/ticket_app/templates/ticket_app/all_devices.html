@@ -19,7 +19,7 @@
         {% if device.state != "Decomissioned" %}
         <tr>
             <td class="active_devices">{{ device.id }}</td>
-            <td class="active_devices">{{ device.node_id }}</td>
+            <td class="active_devices"> <a href="/device/{{ device.node_id }}">{{ device.node_id }}</a> </td>
             <td class="active_devices">{{ device.device_type }}</td>
             <td class="active_devices">{{ device.purchase_date }}</td>
             <td class="active_devices">{{ device.warranty }}</td>

@@ -13,4 +13,6 @@ urlpatterns = [
     path('all_users', views.all_users, name='all_users'),
     path('ticket/<ticket_id>', views.ticket, name='ticket'),
     path("search", views.searchresultsview, name="search_results"),
+    path("user/<user_id>", views.userview, name="userview"),
+    path("device/<node_id>", views.deviceview, name="deviceview"),
 ]

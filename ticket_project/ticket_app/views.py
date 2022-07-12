@@ -174,3 +174,21 @@ def searchresultsview(request):
                'device_search': device_search,
                'kb_search': kb_search}
     return HttpResponse(template.render(context, request))
+
+@login_required
+def userview(request, user_id):
+    template = loader.get_template('ticket_app/user.html')
+    user = Users.objects.filter(id=user_id)
+    context = {'user': user[0]}
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def deviceview(request, node_id):
+    template = loader.get_template('ticket_app/device.html')
+    device = Devices.objects.filter(node_id=node_id)
+    context = {'device': device[0]}
+    return HttpResponse(template.render(context, request))
+
+
+

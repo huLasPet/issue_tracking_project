@@ -6,6 +6,11 @@ from django.db import models
 
 # Create your models here.
 class Users(AbstractUser):
+    STATE_ACTIVE = 'Active'
+    STATE_INACTIVE = 'Inactive'
+    STATE_CHOICES = [(STATE_ACTIVE, 'Active'),
+                     (STATE_INACTIVE, 'Inactive')]
+    state = models.CharField(max_length=20, choices=STATE_CHOICES, default=STATE_ACTIVE)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     middle_name = models.CharField(max_length=200, blank=True)

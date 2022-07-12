@@ -9,7 +9,7 @@ Note to self: make the results clickable so create device and user page as well
 <hr>
 <h2>Users:</h2>
     {% for user in users_search %}
-        {{ user.username }}
+        <a href="/user/{{ user.id }}">{{ user.username }}</a>
     {% endfor %}
 <hr>
 <h2>Tickets:</h2>
@@ -20,7 +20,8 @@ Note to self: make the results clickable so create device and user page as well
 <hr>
 <h2>Devices:</h2>
     {% for device in device_search %}
-        {{ device.node_id }} - {{ device.owner }}
+        <a href="/device/{{ device.node_id }}">{{ device.node_id }} </a>
+        <br>
     {% endfor %}
 <hr>
 <h2>Knowledge articles:</h2>
