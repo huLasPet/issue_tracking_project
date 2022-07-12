@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Users, Devices, Tickets
+from .models import Users, Devices, Tickets, KnowledgeArticles
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
@@ -25,3 +25,4 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(Users, CustomUserAdmin)
 admin.site.register(Devices)
 admin.site.register(Tickets)
+admin.site.register(KnowledgeArticles)

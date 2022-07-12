@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from .models import Users, Tickets, Devices
+from .models import Users, Tickets, Devices, KnowledgeArticles
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.db.models import Q
@@ -18,12 +18,14 @@ def index(request):
     older_tickets_count = Tickets.objects.exclude(opening_date__gt=(datetime.now() - timedelta(days=7))).count()
     old_devices_count = Devices.objects.exclude(warranty__gt=(datetime.now() + timedelta(days=30))).count()
     my_tickets_count = Tickets.objects.filter(assigned_user=request.user).count()
+    kb_count = KnowledgeArticles.objects.filter(state='Active').count()
     template = loader.get_template('ticket_app/index.html')
     context = {
         'open_tickets_count': open_tickets_count,
         'older_tickets_count': older_tickets_count,
         'old_devices_count': old_devices_count,
         'my_tickets_count': my_tickets_count,
+        'kb_count': kb_count,
     }
     return HttpResponse(template.render(context, request))
 
@@ -162,9 +164,13 @@ def ticket(request, ticket_id):
 def searchresultsview(request):
     search_term = request.POST["search"]
     template = loader.get_template('ticket_app/search.html')
-    users_search = Users.objects.filter(username__iexact=search_term)
+    user_search = Users.objects.filter(username__iexact=search_term)
     ticket_search = Tickets.objects.filter(Q(id__iexact=search_term) | Q(description__icontains=search_term))
     device_search = Devices.objects.filter(node_id__iexact=search_term)
-    print(device_search)
-    context = {'search_term': search_term}
+    kb_search = KnowledgeArticles.objects.filter(description__icontains=search_term)
+    context = {'search_term': search_term,
+               'users_search': user_search,
+               'ticket_search': ticket_search,
+               'device_search': device_search,
+               'kb_search': kb_search}
     return HttpResponse(template.render(context, request))

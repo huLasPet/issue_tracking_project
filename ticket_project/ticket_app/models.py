@@ -62,3 +62,18 @@ class Tickets(models.Model):
 
 def __int__(self):
         return self.id
+
+
+class KnowledgeArticles(models.Model):
+    STATE_ACTIVE = 'Active'
+    STATE_INACTIVE = 'Inactive'
+    STATE_CHOICES = [(STATE_ACTIVE, 'Active'),
+                 (STATE_INACTIVE, 'Inactive')]
+    description = models.CharField(max_length=100000)
+    state = models.CharField(max_length=20, choices=STATE_CHOICES, default=STATE_ACTIVE)
+    creation_date = models.DateTimeField('Creation date', default=datetime.now())
+    created_by = models.CharField(max_length=200)
+    modified_by = models.CharField(max_length=200)
+
+def __int__(self):
+    return self.id
