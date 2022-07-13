@@ -1,9 +1,9 @@
 {% extends "./base.html" %}
-{% block title %}All devices{% endblock title %}
+{% block title %}Devices{% endblock title %}
 
 {% block content %}
 
-<h1>Active devices</h1>
+<h1>{{ header_text }}</h1>
     {% if devices %}
     <table class="open_table table table-striped">
         <tr>

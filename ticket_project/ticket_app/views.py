@@ -14,6 +14,7 @@ from django.db.models import Q
 
 @login_required
 def index(request):
+    #Maybe use open_tickets_count and get data from that instead of calling the DB again
     open_tickets_count = Tickets.objects.filter(state='Open').count()
     older_tickets_count = Tickets.objects.exclude(opening_date__gt=(datetime.now() - timedelta(days=7))).count()
     old_devices_count = Devices.objects.exclude(warranty__gt=(datetime.now() + timedelta(days=30))).count()
@@ -32,10 +33,11 @@ def index(request):
 
 @login_required
 def all_tickets(request):
-    tickets = Tickets.objects.order_by('id')
+    tickets = Tickets.objects.all()
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
         'tickets': tickets,
+        'header_text': 'All tickets'
     }
     return HttpResponse(template.render(context, request))
 
@@ -47,6 +49,7 @@ def old_tickets(request):
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
         'tickets': older_tickets,
+        'header_text': 'Tickets older than 7 days'
     }
     return HttpResponse(template.render(context, request))
 
@@ -57,16 +60,18 @@ def my_open_tickets(request):
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
         'tickets': my_tickets,
+        'header_text': 'My open tickets'
     }
     return HttpResponse(template.render(context, request))
 
 
 @login_required
 def all_devices(request):
-    devices = Devices.objects.order_by('id')
+    devices = Devices.objects.all()
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
         'devices': devices,
+        'header_text': 'All active devices'
     }
     return HttpResponse(template.render(context, request))
 
@@ -78,13 +83,16 @@ def short_warranty(request):
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
         'devices': old_devices,
+        'header_text': 'Devices with less than 30 days of warranty'
     }
     return HttpResponse(template.render(context, request))
 
 
 @login_required
 def all_users(request):
-    users = Users.objects.filter(is_superuser=0)
+    #Add pages here, only get the results between 1-10, 11-20 etc based on the pagination from the site.
+    #Get "page" after request and use that to only get the needed items from the query
+    users = Users.objects.filter(is_superuser=0)[1:2]
     template = loader.get_template('ticket_app/all_users.html')
     context = {
         'users': users,
@@ -177,6 +185,7 @@ def searchresultsview(request):
 
 @login_required
 def userview(request, user_id):
+    #Make this editable like the ticket
     template = loader.get_template('ticket_app/user.html')
     user = Users.objects.filter(id=user_id)
     context = {'user': user[0]}
@@ -185,6 +194,7 @@ def userview(request, user_id):
 
 @login_required
 def deviceview(request, node_id):
+    #Make this editable like the ticket
     template = loader.get_template('ticket_app/device.html')
     device = Devices.objects.filter(node_id=node_id)
     context = {'device': device[0]}
