@@ -14,7 +14,6 @@
                 <th class="open_header">Assigned SVD</th>
             </tr>
             {% for ticket in tickets %}
-            {% if ticket.state != "Closed" %}
             <tr>
                 <td class="open_tickets"><a href="/ticket/{{ ticket.id }}">{{ ticket.id }}</a></td>
                 <td class="open_tickets">{{ ticket.affected_user }}</td>
@@ -22,7 +21,6 @@
                 <td class="open_tickets">{{ ticket.assigned_user }}</td>
                 <td class="open_tickets">{{ ticket.assigned_svd }}</td>
             </tr>
-            {% endif %}
             {% endfor %}
         </table>
     {% else %}

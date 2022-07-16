@@ -1,12 +1,12 @@
 {% extends "./base.html" %}
 
-{% block title %}{{ user.username }}{% endblock title %}
+{% block title %}{{ users.username }}{% endblock title %}
 
 {% block content %}
-<form action="{% url 'ticket_app:userview' user.id %}" method="post">
+<form action="{% url 'ticket_app:userview' users.id %}" method="post">
     {% csrf_token %}
     <fieldset>
-        <legend><h1>Details for {{ user.username }}</h1></legend>
+        <legend><h1>Details for {{ users.username }}</h1></legend>
         {% if error_message %}
         <p><strong>{{ error_message }}</strong></p>
         {% endif %}
@@ -14,29 +14,29 @@
             <tbody>
             <tr>
                 <td>First Name:</td>
-                <td><input class="form-control-sm" name="first_name" value="{{ user.first_name }}">
+                <td><input class="form-control-sm" name="first_name" value="{{ users.first_name }}">
                 </td>
 
                 <td>Middle name:</td>
-                <td><input class="form-control-sm" name="middle_name" value="{{ user.middle_name }}">
+                <td><input class="form-control-sm" name="middle_name" value="{{ users.middle_name }}">
                 </td>
 
                 <td>Last name:</td>
-                <td><input class="form-control-sm" name="last_name" value="{{ user.last_name }}">
+                <td><input class="form-control-sm" name="last_name" value="{{ users.last_name }}">
                 </td>
             </tr>
             <tr>
                 <td>Job title:</td>
-                <td><input class="form-control-sm" name="title" value="{{ user.title }}">
+                <td><input class="form-control-sm" name="title" value="{{ users.title }}">
                 </td>
 
                 <td>SVD:</td>
-                <td><input class="form-control-sm" name="svd" value="{{ user.svd }}">
+                <td><input class="form-control-sm" name="svd" value="{{ users.svd }}">
                 </td>
 
                 <td>State:</td>
                 <td><select name="state">
-                    {% if user.state == "Active" %}
+                    {% if users.state == "Active" %}
                     <option value="Active" selected>Active</option>
                     <option value="Inactive">Inactive</option>
                     {% else %}
@@ -47,7 +47,7 @@
             </tr>
             <tr>
                 <td>Account creation date:</td>
-                <td><input class="form-control-sm" name="creation_date" value="{{ user.creation_date }}" readonly>
+                <td><input class="form-control-sm" name="creation_date" value="{{ users.creation_date }}" readonly>
                 </td>
             </tr>
         </table>

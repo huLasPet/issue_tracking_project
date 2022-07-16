@@ -14,7 +14,7 @@ from django.db.models import Q
 
 @login_required
 def index(request):
-    #Maybe use open_tickets_count and get data from that instead of calling the DB again
+    """Index page with cards for displaying some information."""
     open_tickets_count = Tickets.objects.filter(state='Open').count()
     older_tickets_count = Tickets.objects.exclude(opening_date__gt=(datetime.now() - timedelta(days=7))).count()
     old_devices_count = Devices.objects.exclude(warranty__gt=(datetime.now() + timedelta(days=30))).count()
@@ -33,7 +33,8 @@ def index(request):
 
 @login_required
 def all_tickets(request):
-    tickets = Tickets.objects.all()
+    """Show all curretnly open tickets."""
+    tickets = Tickets.objects.filter(state="Open")
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
         'tickets': tickets,
@@ -56,6 +57,7 @@ def old_tickets(request):
 
 @login_required
 def my_open_tickets(request):
+    """Show the open tickets of the logged in user."""
     my_tickets = Tickets.objects.filter(assigned_user=request.user)
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
@@ -67,7 +69,8 @@ def my_open_tickets(request):
 
 @login_required
 def all_devices(request):
-    devices = Devices.objects.all()
+    """Shoe all devices that are not in decomissioned state."""
+    devices = Devices.objects.exclude(state="Decomissioned")
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
         'devices': devices,
@@ -90,6 +93,7 @@ def short_warranty(request):
 
 @login_required
 def all_users(request):
+    """Show all non-admin users."""
     #Add pages here, only get the results between 1-10, 11-20 etc based on the pagination from the site.
     #Get "page" after request and use that to only get the needed items from the query
     users = Users.objects.filter(is_superuser=0)[1:2]
@@ -104,8 +108,7 @@ def all_users(request):
 def open_new_ticket(request):
     """Open a new ticket, users_id is the ID of person who opened the ticket -
      not necessarily the same as the assigned user. This is in order to track who opened the ticket."""
-    tickets = Tickets.objects.all()
-    devices = Devices.objects.all()
+    devices = Devices.objects.exclude(state="Decomissioned")
     users = Users.objects.filter(is_superuser=0)
     svds = []
     for user in users:
@@ -113,7 +116,6 @@ def open_new_ticket(request):
             svds.append(user.svd)
     template = loader.get_template('ticket_app/new_ticket.html')
     context = {
-        'tickets': tickets,
         'devices': devices,
         'users': users,
         'svds': svds
@@ -170,6 +172,8 @@ def ticket(request, ticket_id):
 
 @login_required
 def searchresultsview(request):
+    """Show search results. Search for exact but not case-sensitive username, nodename, ticket id or
+    text in ticket description."""
     search_term = request.POST["search"]
     template = loader.get_template('ticket_app/search.html')
     user_search = Users.objects.filter(username__iexact=search_term)
@@ -185,15 +189,17 @@ def searchresultsview(request):
 
 @login_required
 def userview(request, user_id):
+    """Show details for a user and allow updating it."""
     #Make this editable like the ticket
     template = loader.get_template('ticket_app/user.html')
     user = Users.objects.filter(id=user_id)
-    context = {'user': user[0]}
+    context = {'users': user[0]}
     return HttpResponse(template.render(context, request))
 
 
 @login_required
 def deviceview(request, node_id):
+    """Show details for a device and allow updating it."""
     #Make this editable like the ticket
     template = loader.get_template('ticket_app/device.html')
     device = Devices.objects.filter(node_id=node_id)
