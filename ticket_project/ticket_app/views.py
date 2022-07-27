@@ -96,7 +96,8 @@ def all_users(request):
     """Show all non-admin users."""
     #Add pages here, only get the results between 1-10, 11-20 etc based on the pagination from the site.
     #Get "page" after request and use that to only get the needed items from the query
-    users = Users.objects.filter(is_superuser=0)[1:2]
+    #Send 100 entries and let the client do the pagination
+    users = Users.objects.filter(is_superuser=0)#[1:2]
     template = loader.get_template('ticket_app/all_users.html')
     context = {
         'users': users,
@@ -194,6 +195,15 @@ def userview(request, user_id):
     template = loader.get_template('ticket_app/user.html')
     user = Users.objects.filter(id=user_id)
     context = {'users': user[0]}
+    if request.method == "POST":
+        user[0].first_name = request.POST["first_name"]
+        user[0].middle_name = request.POST["middle_name"]
+        user[0].title = request.POST["title"]
+        user[0].svd = request.POST["svd"]
+        user[0].creation_date = request.POST["creation_date"]
+        user[0].state = request.POST["state"]
+        user[0].save()
+        return HttpResponse(template.render(context, request))
     return HttpResponse(template.render(context, request))
 
 
