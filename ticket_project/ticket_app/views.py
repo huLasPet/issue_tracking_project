@@ -191,18 +191,16 @@ def searchresultsview(request):
 @login_required
 def userview(request, user_id):
     """Show details for a user and allow updating it."""
-    #Make this editable like the ticket
     template = loader.get_template('ticket_app/user.html')
-    user = Users.objects.filter(id=user_id)
-    context = {'users': user[0]}
+    user = Users.objects.filter(id=user_id)[0]
+    context = {'users': user}
     if request.method == "POST":
-        user[0].first_name = request.POST["first_name"]
-        user[0].middle_name = request.POST["middle_name"]
-        user[0].title = request.POST["title"]
-        user[0].svd = request.POST["svd"]
-        user[0].creation_date = request.POST["creation_date"]
-        user[0].state = request.POST["state"]
-        user[0].save()
+        user.first_name = request.POST["first_name"]
+        user.middle_name = request.POST["middle_name"]
+        user.title = request.POST["title"]
+        user.svd = request.POST["svd"]
+        user.state = request.POST["state"]
+        user.save()
         return HttpResponse(template.render(context, request))
     return HttpResponse(template.render(context, request))
 
