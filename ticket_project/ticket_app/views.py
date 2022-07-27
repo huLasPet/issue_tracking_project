@@ -97,7 +97,7 @@ def all_users(request):
     #Add pages here, only get the results between 1-10, 11-20 etc based on the pagination from the site.
     #Get "page" after request and use that to only get the needed items from the query
     #Send 100 entries and let the client do the pagination
-    users = Users.objects.filter(is_superuser=0)#[1:2]
+    users = Users.objects.filter(is_superuser=0, state="Active")#[1:2]
     template = loader.get_template('ticket_app/all_users.html')
     context = {
         'users': users,
@@ -201,17 +201,24 @@ def userview(request, user_id):
         user.svd = request.POST["svd"]
         user.state = request.POST["state"]
         user.save()
-        return HttpResponse(template.render(context, request))
+        return HttpResponseRedirect(f'/user/{user_id}', context)
     return HttpResponse(template.render(context, request))
 
 
 @login_required
 def deviceview(request, node_id):
     """Show details for a device and allow updating it."""
-    #Make this editable like the ticket
     template = loader.get_template('ticket_app/device.html')
-    device = Devices.objects.filter(node_id=node_id)
-    context = {'device': device[0]}
+    device = Devices.objects.filter(node_id=node_id)[0]
+    state = ["In use", "Warehouse", "Under repair", "Decommissioned"]
+    context = {'device': device,
+               'state': state}
+    if request.method == "POST":
+        device.owner = request.POST["owner"]
+        device.device_type = request.POST["device_type"]
+        device.state = request.POST["state"]
+        device.save()
+        return HttpResponseRedirect(f'/device/{node_id}', context)
     return HttpResponse(template.render(context, request))
 
 

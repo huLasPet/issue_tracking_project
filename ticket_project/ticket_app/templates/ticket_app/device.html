@@ -24,26 +24,28 @@
         <td>State:</td>
         <td>
           <select name="state">
-          <option value="In warehouse" selected>In warehouse</option>
-          <option value="Under repair">Under repair</option>
-          <option value="In use">In use</option>
-          <option value="Decomissioned">Decomissioned</option>
+            {% for status in state %}
+            {% if status  == device.state %}
+                <option value="{{ device.state }}" selected>{{ device.state }}</option>
+              {% else %}
+                <option value="{{ status }}">{{ status }}</option>
+              {% endif %}
+            {% endfor %}
           </select>
         </td>
 
       </tr>
       <tr>
         <td>Purchase date:</td>
-        <td><input class="form-control-sm" name="purchase_date" value="{{ device.purchase_date }}">
+        <td><input class="form-control-sm" name="purchase_date" value="{{ device.purchase_date }}" disabled>
         </td>
 
         <td>Warranty:</td>
-        <td><input class="form-control-sm" name="warranty" value="{{ device.warranty }}">
+        <td><input class="form-control-sm" name="warranty" value="{{ device.warranty }}" disabled>
         </td>
       </tr>
     </table>
   </fieldset>
   <input type="submit" value="Submit">
 </form>
-
 {% endblock content %}
