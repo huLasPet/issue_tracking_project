@@ -27,4 +27,9 @@
         <p>No tickets are open.</p>
     {% endif %}
 
+<div class="pagebutton">
+<a class="btn btn-outline-dark" href="/all_tickets/{{ prev_page }}" role="button">Previous</a>
+<a class="btn btn-outline-dark" href="/all_tickets/{{ next_page }}" role="button">Next</a>
+</div>
+
 {% endblock content %}

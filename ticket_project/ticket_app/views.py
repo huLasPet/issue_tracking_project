@@ -32,13 +32,17 @@ def index(request):
 
 
 @login_required
-def all_tickets(request):
-    """Show all curretnly open tickets."""
-    tickets = Tickets.objects.filter(state="Open")
+def all_tickets(request, page):
+    """Show all currently open tickets.
+    prev_page is ternary operator"""
+    page = int(page)
+    tickets = Tickets.objects.filter(state="Open")[(page-1)*50:page*50]
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
         'tickets': tickets,
-        'header_text': 'All tickets'
+        'header_text': 'All tickets',
+        'prev_page': page - 1 if page > 1 else 1,
+        'next_page': page + 1,
     }
     return HttpResponse(template.render(context, request))
 
@@ -46,11 +50,14 @@ def all_tickets(request):
 @login_required
 def old_tickets(request):
     """Show tickets older than 7 days"""
+    page = 1
     older_tickets = Tickets.objects.exclude(opening_date__gt=(datetime.now() - timedelta(days=7)))
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
         'tickets': older_tickets,
-        'header_text': 'Tickets older than 7 days'
+        'header_text': 'Tickets older than 7 days',
+        'prev_page': page - 1 if page > 1 else 1,
+        'next_page': page + 1,
     }
     return HttpResponse(template.render(context, request))
 
@@ -58,11 +65,14 @@ def old_tickets(request):
 @login_required
 def my_open_tickets(request):
     """Show the open tickets of the logged in user."""
+    page = 1
     my_tickets = Tickets.objects.filter(assigned_user=request.user)
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
         'tickets': my_tickets,
-        'header_text': 'My open tickets'
+        'header_text': 'My open tickets',
+        'prev_page': page - 1 if page > 1 else 1,
+        'next_page': page + 1,
     }
     return HttpResponse(template.render(context, request))
 
@@ -70,11 +80,14 @@ def my_open_tickets(request):
 @login_required
 def all_devices(request):
     """Shoe all devices that are not in decomissioned state."""
+    page = 1
     devices = Devices.objects.exclude(state="Decomissioned")
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
         'devices': devices,
-        'header_text': 'All active devices'
+        'header_text': 'All active devices',
+        'prev_page': page - 1 if page > 1 else 1,
+        'next_page': page + 1,
     }
     return HttpResponse(template.render(context, request))
 
@@ -82,11 +95,14 @@ def all_devices(request):
 @login_required
 def short_warranty(request):
     """Display devices where the warranty is less than 30 days."""
+    page = 1
     old_devices = Devices.objects.exclude(warranty__gt=(datetime.now() + timedelta(days=30)))
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
         'devices': old_devices,
-        'header_text': 'Devices with less than 30 days of warranty'
+        'header_text': 'Devices with less than 30 days of warranty',
+        'prev_page': page - 1 if page > 1 else 1,
+        'next_page': page + 1,
     }
     return HttpResponse(template.render(context, request))
 
@@ -94,13 +110,13 @@ def short_warranty(request):
 @login_required
 def all_users(request):
     """Show all non-admin users."""
-    #Add pages here, only get the results between 1-10, 11-20 etc based on the pagination from the site.
-    #Get "page" after request and use that to only get the needed items from the query
-    #Send 100 entries and let the client do the pagination
-    users = Users.objects.filter(is_superuser=0, state="Active")#[1:2]
+    page = 1
+    users = Users.objects.filter(is_superuser=0, state="Active")
     template = loader.get_template('ticket_app/all_users.html')
     context = {
         'users': users,
+        'prev_page': page - 1 if page > 1 else 1,
+        'next_page': page + 1,
     }
     return HttpResponse(template.render(context, request))
 
@@ -179,6 +195,7 @@ def ticket(request, ticket_id):
 def searchresultsview(request):
     """Show search results. Search for exact but not case-sensitive username, nodename, ticket id or
     text in ticket description."""
+    page = 1
     search_term = request.POST["search"]
     template = loader.get_template('ticket_app/search.html')
     user_search = Users.objects.filter(username__iexact=search_term)
@@ -189,7 +206,9 @@ def searchresultsview(request):
                'users_search': user_search,
                'ticket_search': ticket_search,
                'device_search': device_search,
-               'kb_search': kb_search}
+               'kb_search': kb_search,
+               'prev_page': page - 1 if page > 1 else 1,
+               'next_page': page + 1}
     return HttpResponse(template.render(context, request))
 
 @login_required
