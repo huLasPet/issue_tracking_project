@@ -63,7 +63,7 @@ class Tickets(models.Model):
     description = models.CharField(max_length=100000)
     affected_device = models.CharField(max_length=200, default="")
     opening_date = models.DateTimeField('opening date', default=datetime.now())
-
+    priority = models.CharField(max_length=50, default="Low")
 
 def __int__(self):
         return self.id
