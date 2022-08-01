@@ -19,7 +19,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <form action="{% url 'ticket_app:search_results' search_term='I' page=1 %}" method="POST">
+        <form action="{% url 'ticket_app:search_results' search_term='?' page=1 %}" method="POST">
             {% csrf_token %}
             <input class="form-control me-2" name="search" type="text" placeholder="Search...">
         </form>

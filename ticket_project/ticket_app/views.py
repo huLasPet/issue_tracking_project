@@ -196,7 +196,7 @@ def searchresultsview(request, search_term, page):
     """Show search results. Search for exact but not case-sensitive username, nodename, ticket id or
     text in ticket description."""
     page = int(page)
-    if search_term == "I":
+    if request.method == "POST":
         search_term = request.POST["search"]
     template = loader.get_template('ticket_app/search.html')
     user_search = Users.objects.filter(username__iexact=search_term)[(page-1)*50:page*50]
