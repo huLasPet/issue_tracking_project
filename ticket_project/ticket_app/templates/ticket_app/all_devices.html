@@ -34,8 +34,8 @@
     {% endif %}
 
 <div class="pagebutton">
-    <a class="btn btn-outline-dark" href="" role="button">Previous</a>
-    <a class="btn btn-outline-dark" href="" role="button">Next</a>
+    <a class="btn btn-outline-dark" href="{% url 'ticket_app:all_devices' page=prev_page %}" role="button">Previous</a>
+    <a class="btn btn-outline-dark" href="{% url 'ticket_app:all_devices' page=next_page %}" role="button">Next</a>
 </div>
 
 {% endblock content %}

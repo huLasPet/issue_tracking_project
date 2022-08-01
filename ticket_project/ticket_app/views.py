@@ -78,10 +78,10 @@ def my_open_tickets(request):
 
 
 @login_required
-def all_devices(request):
+def all_devices(request, page):
     """Shoe all devices that are not in decomissioned state."""
-    page = 1
-    devices = Devices.objects.exclude(state="Decomissioned")
+    page = int(page)
+    devices = Devices.objects.exclude(state="Decomissioned")[(page-1)*50:page*50]
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
         'devices': devices,
@@ -108,10 +108,10 @@ def short_warranty(request):
 
 
 @login_required
-def all_users(request):
+def all_users(request, page):
     """Show all non-admin users."""
-    page = 1
-    users = Users.objects.filter(is_superuser=0, state="Active")
+    page = int(page)
+    users = Users.objects.filter(is_superuser=0, state="Active")[(page-1)*50:page*50]
     template = loader.get_template('ticket_app/all_users.html')
     context = {
         'users': users,
@@ -192,16 +192,17 @@ def ticket(request, ticket_id):
 
 
 @login_required
-def searchresultsview(request):
+def searchresultsview(request, search_term, page):
     """Show search results. Search for exact but not case-sensitive username, nodename, ticket id or
     text in ticket description."""
-    page = 1
-    search_term = request.POST["search"]
+    page = int(page)
+    if search_term == "I":
+        search_term = request.POST["search"]
     template = loader.get_template('ticket_app/search.html')
-    user_search = Users.objects.filter(username__iexact=search_term)
-    ticket_search = Tickets.objects.filter(Q(id__iexact=search_term) | Q(description__icontains=search_term))
-    device_search = Devices.objects.filter(node_id__iexact=search_term)
-    kb_search = KnowledgeArticles.objects.filter(description__icontains=search_term)
+    user_search = Users.objects.filter(username__iexact=search_term)[(page-1)*50:page*50]
+    ticket_search = Tickets.objects.filter(Q(id__iexact=search_term) | Q(description__icontains=search_term))[(page-1)*50:page*50]
+    device_search = Devices.objects.filter(node_id__iexact=search_term)[(page-1)*50:page*50]
+    kb_search = KnowledgeArticles.objects.filter(description__icontains=search_term)[(page-1)*50:page*50]
     context = {'search_term': search_term,
                'users_search': user_search,
                'ticket_search': ticket_search,

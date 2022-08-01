@@ -19,7 +19,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <form action="{% url 'ticket_app:search_results' %}" method="POST">
+        <form action="{% url 'ticket_app:search_results' search_term='I' page=1 %}" method="POST">
             {% csrf_token %}
             <input class="form-control me-2" name="search" type="text" placeholder="Search...">
         </form>
@@ -47,8 +47,8 @@
                         <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
 
                             <li><a class="dropdown-item" href="{% url 'ticket_app:all_tickets' page=1 %} ">All tickets</a></li>
-                            <li><a class="dropdown-item" href="{% url 'ticket_app:all_devices' %}">All devices</a></li>
-                            <li><a class="dropdown-item" href="{% url 'ticket_app:all_users' %}">All users</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ticket_app:all_devices' page=1 %}">All devices</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ticket_app:all_users' page=1 %}">All users</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
