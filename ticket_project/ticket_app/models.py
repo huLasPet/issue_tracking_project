@@ -25,12 +25,12 @@ class Users(AbstractUser):
 
 class Devices(models.Model):
     STATE_IN_USE = 'In use'
-    STATE_DECOMISSIONED = 'Decomissioned'
+    STATE_DECOMMISSIONED = 'Decommissioned'
     STATE_WH = 'In warehouse'
-    STATE_REPAIR = 'Under repair'
+    STATE_REPAIR = 'Repair'
     STATE_CHOICES = [(STATE_WH, 'Warehouse'),
                      (STATE_REPAIR, 'Repair'),
-                     (STATE_DECOMISSIONED, 'Decomissioned'),
+                     (STATE_DECOMMISSIONED, 'Decommissioned'),
                      (STATE_IN_USE, 'In use')]
     TYPE_LAPTOP = "Laptop"
     TYPE_DESKTOP = "Desktop"

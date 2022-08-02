@@ -4,7 +4,7 @@
 {% block content %}
 
 <h1>{{ header_text }}</h1>
-    {% if devices %}
+    {% if page_obj %}
     <table class="open_table table table-striped">
         <tr>
             <th class="open_header">Device ID</th>
@@ -15,8 +15,7 @@
             <th class="open_header">State</th>
             <th class="open_header">Owner</th>
         </tr>
-        {% for device in devices %}
-        {% if device.state != "Decomissioned" %}
+        {% for device in page_obj %}
         <tr>
             <td class="active_devices">{{ device.id }}</td>
             <td class="active_devices"> <a href="/device/{{ device.node_id }}">{{ device.node_id }}</a> </td>
@@ -26,16 +25,29 @@
             <td class="active_devices">{{ device.state }}</td>
             <td class="active_devices">{{ device.owner }}</td>
         </tr>
-        {% endif %}
         {% endfor %}
     </table>
     {% else %}
     <p>No active devices.</p>
     {% endif %}
 
-<div class="pagebutton">
-    <a class="btn btn-outline-dark" href="{% url 'ticket_app:all_devices' page=prev_page %}" role="button">Previous</a>
-    <a class="btn btn-outline-dark" href="{% url 'ticket_app:all_devices' page=next_page %}" role="button">Next</a>
+<div class="pagination pagebutton">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-outline-dark" href="?page=1">&laquo; first</a>
+                    <a class="btn btn-outline-dark" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a class="btn btn-outline-dark" href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a class="btn btn-outline-dark" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
 </div>
+
 
 {% endblock content %}

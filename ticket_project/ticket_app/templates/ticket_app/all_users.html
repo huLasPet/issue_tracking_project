@@ -3,7 +3,7 @@
 
 {% block content %}
     <h1>Active users</h1>
-    {% if users %}
+    {% if page_obj %}
     <table class="open_table table table-striped">
         <tr>
             <th class="open_header">Username</th>
@@ -13,8 +13,7 @@
             <th class="open_header">SVD</th>
             <th class="open_header">Role</th>
         </tr>
-        {% for user in users %}
-        {% if user.is_active != 0 %}
+        {% for user in page_obj %}
         <tr>
             <td class="active_users"> <a href="/user/{{ user.id }}">{{ user.username }}</a> </td>
             <td class="active_users">{{ user.first_name }}</td>
@@ -23,16 +22,28 @@
             <td class="active_users">{{ user.svd }}</td>
             <td class="active_users">{{ user.title }}</td>
         </tr>
-        {% endif %}
         {% endfor %}
     </table>
     {% else %}
     <p>No active users.</p>
     {% endif %}
 
-<div class="pagebutton">
-    <a class="btn btn-outline-dark" href="{% url 'ticket_app:all_users' page=prev_page %}" role="button">Previous</a>
-    <a class="btn btn-outline-dark" href="{% url 'ticket_app:all_users' page=next_page %}" role="button">Next</a>
+<div class="pagination pagebutton">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-outline-dark" href="?page=1">&laquo; first</a>
+                    <a class="btn btn-outline-dark" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a class="btn btn-outline-dark" href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a class="btn btn-outline-dark" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
 </div>
 
 {% endblock content %}

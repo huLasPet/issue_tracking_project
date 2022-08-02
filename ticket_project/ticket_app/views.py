@@ -5,19 +5,26 @@ from .models import Users, Tickets, Devices, KnowledgeArticles
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 # Create your views here.
 
 # REMOVE DUPLICATES WHEN ALL VIEWS ARE DONE
 
+def pagination(request, query):
+    paginator = Paginator(query, 25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return page_obj
+
 
 @login_required
 def index(request):
     """Index page with cards for displaying some information."""
     open_tickets_count = Tickets.objects.filter(state='Open').count()
-    older_tickets_count = Tickets.objects.exclude(opening_date__gt=(datetime.now() - timedelta(days=7))).count()
-    old_devices_count = Devices.objects.exclude(warranty__gt=(datetime.now() + timedelta(days=30))).count()
+    older_tickets_count = Tickets.objects.exclude(Q(opening_date__gt=(datetime.now() - timedelta(days=7))) | Q(state="Closed")).count()
+    old_devices_count = Devices.objects.exclude(Q(warranty__gt=(datetime.now() + timedelta(days=30))) | Q(state="Decommissioned")).count()
     my_tickets_count = Tickets.objects.filter(assigned_user=request.user).count()
     kb_count = KnowledgeArticles.objects.filter(state='Active').count()
     template = loader.get_template('ticket_app/index.html')
@@ -32,17 +39,15 @@ def index(request):
 
 
 @login_required
-def all_tickets(request, page):
+def all_tickets(request):
     """Show all currently open tickets.
     prev_page is ternary operator"""
-    page = int(page)
-    tickets = Tickets.objects.filter(state="Open")[(page-1)*50:page*50]
+    tickets = Tickets.objects.filter(state="Open")
+    page_obj = pagination(request, tickets)
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
-        'tickets': tickets,
         'header_text': 'All tickets',
-        'prev_page': page - 1 if page > 1 else 1,
-        'next_page': page + 1,
+        'page_obj': page_obj,
     }
     return HttpResponse(template.render(context, request))
 
@@ -50,14 +55,12 @@ def all_tickets(request, page):
 @login_required
 def old_tickets(request):
     """Show tickets older than 7 days"""
-    page = 1
-    older_tickets = Tickets.objects.exclude(opening_date__gt=(datetime.now() - timedelta(days=7)))
+    older_tickets = Tickets.objects.exclude(Q(opening_date__gt=(datetime.now() - timedelta(days=7))) | Q(state="Closed"))
+    page_obj = pagination(request, older_tickets)
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
-        'tickets': older_tickets,
         'header_text': 'Tickets older than 7 days',
-        'prev_page': page - 1 if page > 1 else 1,
-        'next_page': page + 1,
+        'page_obj': page_obj,
     }
     return HttpResponse(template.render(context, request))
 
@@ -65,29 +68,25 @@ def old_tickets(request):
 @login_required
 def my_open_tickets(request):
     """Show the open tickets of the logged in user."""
-    page = 1
     my_tickets = Tickets.objects.filter(assigned_user=request.user)
+    page_obj = pagination(request, my_tickets)
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
-        'tickets': my_tickets,
         'header_text': 'My open tickets',
-        'prev_page': page - 1 if page > 1 else 1,
-        'next_page': page + 1,
+        'page_obj': page_obj,
     }
     return HttpResponse(template.render(context, request))
 
 
 @login_required
-def all_devices(request, page):
+def all_devices(request):
     """Shoe all devices that are not in decomissioned state."""
-    page = int(page)
-    devices = Devices.objects.exclude(state="Decomissioned")[(page-1)*50:page*50]
+    devices = Devices.objects.exclude(state="Decommissioned")
+    page_obj = pagination(request, devices)
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
-        'devices': devices,
         'header_text': 'All active devices',
-        'prev_page': page - 1 if page > 1 else 1,
-        'next_page': page + 1,
+        'page_obj': page_obj,
     }
     return HttpResponse(template.render(context, request))
 
@@ -95,28 +94,24 @@ def all_devices(request, page):
 @login_required
 def short_warranty(request):
     """Display devices where the warranty is less than 30 days."""
-    page = 1
-    old_devices = Devices.objects.exclude(warranty__gt=(datetime.now() + timedelta(days=30)))
+    old_devices = Devices.objects.exclude(Q(warranty__gt=(datetime.now() + timedelta(days=30))) | Q(state="Decommissioned"))
+    page_obj = pagination(request, old_devices)
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
-        'devices': old_devices,
+        'page_obj': page_obj,
         'header_text': 'Devices with less than 30 days of warranty',
-        'prev_page': page - 1 if page > 1 else 1,
-        'next_page': page + 1,
     }
     return HttpResponse(template.render(context, request))
 
 
 @login_required
-def all_users(request, page):
+def all_users(request):
     """Show all non-admin users."""
-    page = int(page)
-    users = Users.objects.filter(is_superuser=0, state="Active")[(page-1)*50:page*50]
+    users = Users.objects.filter(is_superuser=0, state="Active")
+    page_obj = pagination(request, users)
     template = loader.get_template('ticket_app/all_users.html')
     context = {
-        'users': users,
-        'prev_page': page - 1 if page > 1 else 1,
-        'next_page': page + 1,
+        'page_obj': page_obj,
     }
     return HttpResponse(template.render(context, request))
 
@@ -192,25 +187,27 @@ def ticket(request, ticket_id):
 
 
 @login_required
-def searchresultsview(request, search_term, page):
+def searchresultsview(request, search_term):
     """Show search results. Search for exact but not case-sensitive username, nodename, ticket id or
     text in ticket description."""
-    page = int(page)
     if request.method == "POST":
         search_term = request.POST["search"]
     template = loader.get_template('ticket_app/search.html')
-    user_search = Users.objects.filter(username__iexact=search_term)[(page-1)*50:page*50]
-    ticket_search = Tickets.objects.filter(Q(id__iexact=search_term) | Q(description__icontains=search_term))[(page-1)*50:page*50]
-    device_search = Devices.objects.filter(node_id__iexact=search_term)[(page-1)*50:page*50]
-    kb_search = KnowledgeArticles.objects.filter(description__icontains=search_term)[(page-1)*50:page*50]
+    user_search = Users.objects.filter(username__iexact=search_term)
+    page_obj_user = pagination(request, user_search)
+    ticket_search = Tickets.objects.filter(Q(id__iexact=search_term) | Q(description__icontains=search_term))
+    page_obj_ticket = pagination(request, ticket_search)
+    device_search = Devices.objects.filter(node_id__iexact=search_term)
+    page_obj_device = pagination(request, device_search)
+    kb_search = KnowledgeArticles.objects.filter(description__icontains=search_term)
+    page_obj_kb = pagination(request, kb_search)
     context = {'search_term': search_term,
-               'users_search': user_search,
-               'ticket_search': ticket_search,
-               'device_search': device_search,
-               'kb_search': kb_search,
-               'prev_page': page - 1 if page > 1 else 1,
-               'next_page': page + 1}
+               'page_obj_ticket': page_obj_ticket,
+               'page_obj_user': page_obj_user,
+               'page_obj_device': page_obj_device,
+               'page_obj_kb': page_obj_kb}
     return HttpResponse(template.render(context, request))
+
 
 @login_required
 def userview(request, user_id):
@@ -234,7 +231,7 @@ def deviceview(request, node_id):
     """Show details for a device and allow updating it."""
     template = loader.get_template('ticket_app/device.html')
     device = Devices.objects.filter(node_id=node_id)[0]
-    state = ["In use", "Warehouse", "Under repair", "Decommissioned"]
+    state = ["In use", "Warehouse", "Repair", "Decommissioned"]
     context = {'device': device,
                'state': state}
     if request.method == "POST":
@@ -244,6 +241,3 @@ def deviceview(request, node_id):
         device.save()
         return HttpResponseRedirect(f'/device/{node_id}', context)
     return HttpResponse(template.render(context, request))
-
-
-

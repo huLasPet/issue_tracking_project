@@ -6,31 +6,110 @@
 
 <h3>Search results for {{ search_term }}</h3>
 <hr>
-<h2>Users:</h2>
-    {% for user in users_search %}
-        <a href="/user/{{ user.id }}">{{ user.username }}</a>
-    {% endfor %}
+
+{% if page_obj_user %}
+    <h2>Users:</h2>
+        {% for user in page_obj_user %}
+            <a href="/user/{{ user.id }}">{{ user.username }}</a>
+        {% endfor %}
+<div class="pagination pagebutton">
+            <span class="step-links">
+                {% if page_obj_user.has_previous %}
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?">&laquo; first</a>
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_user.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj_user.number }} of {{ page_obj_user.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj_user.has_next %}
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_user.next_page_number}}" role="button">next</a>
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_user.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+</div>
+
 <hr>
+{% endif %}
+
+
+{% if page_obj_ticket %}
 <h2>Tickets:</h2>
-    {% for ticket in ticket_search %}
+    {% for ticket in page_obj_ticket %}
         <a href="/ticket/{{ ticket.id }}">{{ ticket.id }} - {{ ticket.description }}</a>
         <br>
     {% endfor %}
+<div class="pagination pagebutton">
+            <span class="step-links">
+                {% if page_obj_ticket.has_previous %}
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?">&laquo; first</a>
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_ticket.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj_ticket.number }} of {{ page_obj_ticket.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj_ticket.has_next %}
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_ticket.next_page_number}}" role="button">next</a>
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_ticket.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+</div>
 <hr>
+{% endif %}
+
+{% if page_obj_device %}
 <h2>Devices:</h2>
-    {% for device in device_search %}
+    {% for device in page_obj_device %}
         <a href="/device/{{ device.node_id }}">{{ device.node_id }} </a>
         <br>
     {% endfor %}
+<div class="pagination pagebutton">
+            <span class="step-links">
+                {% if page_obj_device.has_previous %}
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?">&laquo; first</a>
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_device.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj_device.number }} of {{ page_obj_device.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj_device.has_next %}
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_device.next_page_number}}" role="button">next</a>
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_device.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+</div>
 <hr>
+{% endif %}
+
+{% if page_obj_kb %}
 <h2>Knowledge articles:</h2>
-    {% for kb_article in kb_search %}
+    {% for kb_article in page_obj_kb %}
         {{ kb_article.id }} - {{ kb_article.description }}
     {% endfor %}
+<div class="pagination pagebutton">
+            <span class="step-links">
+                {% if page_obj_kb.has_previous %}
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?">&laquo; first</a>
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_kb.previous_page_number }}">previous</a>
+                {% endif %}
 
-<div class="pagebutton">
-    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term page=prev_page %}" role="button">Previous</a>
-    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term page=next_page %}" role="button">Next</a>
+                <span class="current">
+                    Page {{ page_obj_kb.number }} of {{ page_obj_kb.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj_kb.has_next %}
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term %}?page={{ page_obj_kb.next_page_number}}" role="button">next</a>
+                    <a class="btn btn-outline-dark" href="{% url 'ticket_app:search_results' search_term=search_term  %}?page={{ page_obj_kb.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
 </div>
+<hr>
+{% endif %}
+
 
 {% endblock content %}
