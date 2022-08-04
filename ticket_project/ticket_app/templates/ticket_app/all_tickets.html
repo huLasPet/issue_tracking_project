@@ -5,24 +5,28 @@
 {% block content %}
 <h1>{{ header_text }}</h1>
     {% if page_obj %}
-        <table class="open_table table table-striped">
+        <div class="table-responsive open_table">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="open_header">
             <tr>
-                <th class="open_header">Ticket number</th>
-                <th class="open_header">Affected user</th>
-                <th class="open_header">Description</th>
-                <th class="open_header">Assigned user</th>
-                <th class="open_header">Assigned SVD</th>
+                <th>Ticket number</th>
+                <th>Affected user</th>
+                <th>Description</th>
+                <th>Assigned user</th>
+                <th>Assigned SVD</th>
             </tr>
+            </thead>
             {% for ticket in page_obj %}
             <tr>
-                <td class="open_tickets"><a href="/ticket/{{ ticket.id }}">{{ ticket.id }}</a></td>
-                <td class="open_tickets">{{ ticket.affected_user }}</td>
-                <td class="open_tickets">{{ ticket.description }}</td>
-                <td class="open_tickets">{{ ticket.assigned_user }}</td>
-                <td class="open_tickets">{{ ticket.assigned_svd }}</td>
+                <td><a href="/ticket/{{ ticket.id }}">{{ ticket.id }}</a></td>
+                <td >{{ ticket.affected_user }}</td>
+                <td >{{ ticket.description }}</td>
+                <td >{{ ticket.assigned_user }}</td>
+                <td >{{ ticket.assigned_svd }}</td>
             </tr>
             {% endfor %}
         </table>
+        </div>
         {% else %}
         <p>No tickets are open.</p>
         {% endif %}

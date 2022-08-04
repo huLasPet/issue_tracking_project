@@ -6,13 +6,15 @@
 .open_table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 100%;
+  padding: 15px;
+  text-align: center;
 
 }
 
-.open_header, .active_users, .active_devices, .open_tickets{
+.open_header{
   border: 1px solid #dddddd;
-  padding: 8px;
   text-align: center;
+  background: black;
+  color: white;
 }
 

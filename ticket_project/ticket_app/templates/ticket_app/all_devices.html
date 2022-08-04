@@ -5,28 +5,32 @@
 
 <h1>{{ header_text }}</h1>
     {% if page_obj %}
-    <table class="open_table table table-striped">
+    <div class="table-responsive open_table">
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="open_header">
         <tr>
-            <th class="open_header">Device ID</th>
-            <th class="open_header">Device nodename</th>
-            <th class="open_header">Device type</th>
-            <th class="open_header">Purchase date</th>
-            <th class="open_header">Warranty end</th>
-            <th class="open_header">State</th>
-            <th class="open_header">Owner</th>
+            <th>Device ID</th>
+            <th>Device nodename</th>
+            <th>Device type</th>
+            <th>Purchase date</th>
+            <th>Warranty end</th>
+            <th>State</th>
+            <th>Owner</th>
         </tr>
+        </thead>
         {% for device in page_obj %}
         <tr>
-            <td class="active_devices">{{ device.id }}</td>
-            <td class="active_devices"> <a href="/device/{{ device.node_id }}">{{ device.node_id }}</a> </td>
-            <td class="active_devices">{{ device.device_type }}</td>
-            <td class="active_devices">{{ device.purchase_date }}</td>
-            <td class="active_devices">{{ device.warranty }}</td>
-            <td class="active_devices">{{ device.state }}</td>
-            <td class="active_devices">{{ device.owner }}</td>
+            <td>{{ device.id }}</td>
+            <td><a href="/device/{{ device.node_id }}">{{ device.node_id }}</a> </td>
+            <td>{{ device.device_type }}</td>
+            <td>{{ device.purchase_date }}</td>
+            <td>{{ device.warranty }}</td>
+            <td>{{ device.state }}</td>
+            <td>{{ device.owner }}</td>
         </tr>
         {% endfor %}
     </table>
+    </div>
     {% else %}
     <p>No active devices.</p>
     {% endif %}
