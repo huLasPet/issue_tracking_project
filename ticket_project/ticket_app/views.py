@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.db.models import Q
 from django.core.paginator import Paginator
+import re
 
 
 # Create your views here.
@@ -160,14 +161,19 @@ def ticket(request, ticket_id):
     Get data back to update the DB, refresh the page."""
     ticket_id = int(ticket_id)
     priority = ["Low", "Medium", "High", "Critical"]
+    svds = []
+    history = []
     tickets = get_object_or_404(Tickets, pk=ticket_id)
     devices = Devices.objects.filter(users__username=tickets.affected_user)
     if not devices:
         devices = ["No device"]
     users = Users.objects.filter(is_superuser=0)
-    svds = []
     template = loader.get_template('ticket_app/ticket.html')
-    tickets.history = ["Test", "Test2"]
+    if tickets.history:
+        pat = r'(?<=\[).+?(?=\])'
+        match_object = re.findall(pat, tickets.history)
+        for object in match_object:
+            history.append(object)
     for user in users:
         if user.svd not in svds:
             svds.append(user.svd)
@@ -176,9 +182,11 @@ def ticket(request, ticket_id):
                'users': users,
                'svds': svds,
                'priority': priority,
+               'history': history,
                }
     if request.method == "POST":
-        print(request.POST["update_note"])
+        tickets.history = tickets.history + ", " + f"[{datetime.now().strftime('%d/%m/%Y %H:%M:%S')} - " \
+                                                   f"{request.POST['update_note']}]"
         tickets.affected_user = request.POST["affected_user"]
         tickets.affected_device = request.POST["affected_device"]
         tickets.assigned_user = request.POST["assigned_user"]
