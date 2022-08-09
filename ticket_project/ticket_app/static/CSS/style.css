@@ -6,7 +6,7 @@
 .open_table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  padding: 15px;
+
   text-align: center;
 
 }
@@ -20,6 +20,8 @@
 
 .base_body_background {
     background-color: whitesmoke;
-    padding: 1rem;
+
+    max-width: 90%;
+    margin: auto;
 }
 

@@ -84,6 +84,19 @@
                     </select>
                 </td>
             </tr>
+            <tr>
+                <td>Update notes:</td>
+                <td><textarea cols="126" name="update_note">Enter update here</textarea></td>
+            </tr>
+            <tr>
+                <td>Action history:</td>
+                {% for actions in tickets.history %}
+                <tr>
+                <td></td>
+                <td><textarea cols="126" name="actions" disabled>{{ actions }}</textarea></td>
+                </tr>
+                {% endfor %}
+            </tr>
             </tbody>
         </table>
     </fieldset>

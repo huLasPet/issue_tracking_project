@@ -61,6 +61,21 @@
                     <option value="Closed">Closed</option>
                 </select></td>
             </tr>
+            <tr>
+                <td>Priority:</td>
+                <td>
+                    <select name="priority">
+                        {% for prio in priority %}
+                        {% if prio  == tickets.priority %}
+                        <option value="{{ tickets.priority }}" selected>{{ tickets.priority }}</option>
+                        {% else %}
+                        <option value="{{ prio }}">{{ prio }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+
             </tbody>
         </table>
     </fieldset>

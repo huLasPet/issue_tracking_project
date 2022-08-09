@@ -122,6 +122,7 @@ def open_new_ticket(request):
      not necessarily the same as the assigned user. This is in order to track who opened the ticket."""
     devices = Devices.objects.exclude(state="Decomissioned")
     users = Users.objects.filter(is_superuser=0)
+    priority = ["Low", "Medium", "High", "Critical"]
     svds = []
     for user in users:
         if user.svd not in svds:
@@ -130,7 +131,8 @@ def open_new_ticket(request):
     context = {
         'devices': devices,
         'users': users,
-        'svds': svds
+        'svds': svds,
+        'priority': priority,
     }
     if request.method == "POST":
         user = Users.objects.filter(username=request.user)
@@ -140,6 +142,7 @@ def open_new_ticket(request):
                              assigned_svd=request.POST["assigned_svd"],
                              description=request.POST["description"],
                              state=request.POST["state"],
+                             priority=request.POST["priority"],
                              users_id=user[0].id)
 
         new_ticket.save()
@@ -164,6 +167,7 @@ def ticket(request, ticket_id):
     users = Users.objects.filter(is_superuser=0)
     svds = []
     template = loader.get_template('ticket_app/ticket.html')
+    tickets.history = ["Test", "Test2"]
     for user in users:
         if user.svd not in svds:
             svds.append(user.svd)
@@ -174,6 +178,7 @@ def ticket(request, ticket_id):
                'priority': priority,
                }
     if request.method == "POST":
+        print(request.POST["update_note"])
         tickets.affected_user = request.POST["affected_user"]
         tickets.affected_device = request.POST["affected_device"]
         tickets.assigned_user = request.POST["assigned_user"]
