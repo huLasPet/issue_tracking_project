@@ -8,9 +8,6 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 import re
 
-
-# Create your views here.
-
 # REMOVE DUPLICATES WHEN ALL VIEWS ARE DONE
 
 def pagination(request, query):
@@ -185,8 +182,9 @@ def ticket(request, ticket_id):
                'history': history,
                }
     if request.method == "POST":
-        tickets.history = tickets.history + ", " + f"[{datetime.now().strftime('%d/%m/%Y %H:%M:%S')} - " \
-                                                   f"{request.POST['update_note']}]"
+        if request.POST['update_note'] != "Enter update here" and request.POST['update_note'] != "":
+            tickets.history = tickets.history + ", " + f"[{datetime.now().strftime('%d/%m/%Y %H:%M:%S')} - " \
+                                                       f"{request.POST['update_note']}]"
         tickets.affected_user = request.POST["affected_user"]
         tickets.affected_device = request.POST["affected_device"]
         tickets.assigned_user = request.POST["assigned_user"]
@@ -254,3 +252,4 @@ def deviceview(request, node_id):
         device.save()
         return HttpResponseRedirect(f'/device/{node_id}', context)
     return HttpResponse(template.render(context, request))
+

@@ -64,9 +64,9 @@ class Tickets(models.Model):
     affected_device = models.CharField(max_length=200, default="")
     opening_date = models.DateTimeField('opening date', default=datetime.now())
     priority = models.CharField(max_length=50, default="Low")
-    history = models.CharField(max_length=100000, default="")
+    history = models.CharField(max_length=100000, default="", blank=True)
 
-def __int__(self):
+    def __int__(self):
         return self.id
 
 
@@ -81,5 +81,5 @@ class KnowledgeArticles(models.Model):
     created_by = models.CharField(max_length=200)
     modified_by = models.CharField(max_length=200)
 
-def __int__(self):
-    return self.id
+    def __int__(self):
+        return self.id
