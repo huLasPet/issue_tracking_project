@@ -8,7 +8,9 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 import re
 
+
 # REMOVE DUPLICATES WHEN ALL VIEWS ARE DONE
+
 
 def pagination(request, query):
     paginator = Paginator(query, 25)
@@ -21,8 +23,10 @@ def pagination(request, query):
 def index(request):
     """Index page with cards for displaying some information."""
     open_tickets_count = Tickets.objects.filter(state='Open').count()
-    older_tickets_count = Tickets.objects.exclude(Q(opening_date__gt=(datetime.now() - timedelta(days=7))) | Q(state="Closed")).count()
-    old_devices_count = Devices.objects.exclude(Q(warranty__gt=(datetime.now() + timedelta(days=30))) | Q(state="Decommissioned")).count()
+    older_tickets_count = Tickets.objects.exclude(
+        Q(opening_date__gt=(datetime.now() - timedelta(days=7))) | Q(state="Closed")).count()
+    old_devices_count = Devices.objects.exclude(
+        Q(warranty__gt=(datetime.now() + timedelta(days=30))) | Q(state="Decommissioned")).count()
     my_tickets_count = Tickets.objects.filter(assigned_user=request.user).count()
     kb_count = KnowledgeArticles.objects.filter(state='Active').count()
     template = loader.get_template('ticket_app/index.html')
@@ -53,7 +57,8 @@ def all_tickets(request):
 @login_required
 def old_tickets(request):
     """Show tickets older than 7 days"""
-    older_tickets = Tickets.objects.exclude(Q(opening_date__gt=(datetime.now() - timedelta(days=7))) | Q(state="Closed"))
+    older_tickets = Tickets.objects.exclude(
+        Q(opening_date__gt=(datetime.now() - timedelta(days=7))) | Q(state="Closed"))
     page_obj = pagination(request, older_tickets)
     template = loader.get_template('ticket_app/all_tickets.html')
     context = {
@@ -92,7 +97,8 @@ def all_devices(request):
 @login_required
 def short_warranty(request):
     """Display devices where the warranty is less than 30 days."""
-    old_devices = Devices.objects.exclude(Q(warranty__gt=(datetime.now() + timedelta(days=30))) | Q(state="Decommissioned"))
+    old_devices = Devices.objects.exclude(
+        Q(warranty__gt=(datetime.now() + timedelta(days=30))) | Q(state="Decommissioned"))
     page_obj = pagination(request, old_devices)
     template = loader.get_template('ticket_app/all_devices.html')
     context = {
@@ -252,4 +258,3 @@ def deviceview(request, node_id):
         device.save()
         return HttpResponseRedirect(f'/device/{node_id}', context)
     return HttpResponse(template.render(context, request))
-
