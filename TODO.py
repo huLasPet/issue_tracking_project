@@ -1,6 +1,9 @@
 #   TODO:
 #   6. KB system?
-#   7. API calls to get data, option to download data as an Excel file
+#   7. Option to download data as an Excel file
+#   9. Instead of many API functions, have only 1 that gets all its data from the <> in the address -
+#       like <all_ticket> for all tickets or <one_ticket>/<ticket_number> for just one
+#       https://stackoverflow.com/questions/14351048/django-optional-url-parameters
 
 
 # Add device to DB:

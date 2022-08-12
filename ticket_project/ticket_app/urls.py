@@ -15,4 +15,15 @@ urlpatterns = [
     path("search/<search_term>", views.searchresultsview, name="search_results"),
     path("user/<user_id>", views.userview, name="userview"),
     path("device/<node_id>", views.deviceview, name="deviceview"),
+    path('all_users/api-all', views.api_get_all_users, name='api_all_users'),
+    path('all_users/api-<username>', views.api_get_one_user, name='api_one_user'),
+    path('all_devices/api-all', views.api_get_all_devices, name='api_all_devices'),
+    path('all_devices/api-<node_id>', views.api_get_one_device, name='api_one_device'),
+    path('all_tickets/api-all', views.api_get_all_tickets, name='api_all_tickets'),
+    path('all_tickets/api-<ticket_number>', views.api_get_one_ticket, name='api_one_ticket'),
+    path('all_kbs/api-all', views.api_get_all_kbs, name='api_all_kbs'),
+    path('all_kbs/api-<kb_id>', views.api_get_one_kb, name='api_one_kb'),
+
+
+
 ]

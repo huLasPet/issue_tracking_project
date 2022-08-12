@@ -6,6 +6,11 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.db.models import Q
 from django.core.paginator import Paginator
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
+from .serializers import UserSerial, DeviceSerial, TicketSerial, KBSerial
 import re
 
 
@@ -258,3 +263,59 @@ def deviceview(request, node_id):
         device.save()
         return HttpResponseRedirect(f'/device/{node_id}', context)
     return HttpResponse(template.render(context, request))
+
+
+@api_view(('GET',))
+def api_get_all_users(*args):
+    users = Users.objects.all()
+    serializer = UserSerial(users, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(('GET',))
+def api_get_one_user(request, username):
+    users = Users.objects.get(username=username)
+    serializer = UserSerial(users)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(('GET',))
+def api_get_all_devices(*args):
+    devices = Devices.objects.all()
+    serializer = DeviceSerial(devices, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(('GET',))
+def api_get_one_device(request, node_id):
+    devices = Devices.objects.get(node_id=node_id)
+    serializer = DeviceSerial(devices)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(('GET',))
+def api_get_all_tickets(*args):
+    tickets = Tickets.objects.all()
+    serializer = TicketSerial(tickets, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(('GET',))
+def api_get_one_ticket(request, ticket_number):
+    tickets = Tickets.objects.get(pk=ticket_number)
+    serializer = TicketSerial(tickets)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(('GET',))
+def api_get_all_kbs(*args):
+    kb_articles = KnowledgeArticles.objects.all()
+    serializer = KBSerial(kb_articles, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(('GET',))
+def api_get_one_kb(request, kb_id):
+    kb_articles = KnowledgeArticles.objects.get(pk=kb_id)
+    serializer = KBSerial(kb_articles)
+    return Response(serializer.data, status=status.HTTP_200_OK)
