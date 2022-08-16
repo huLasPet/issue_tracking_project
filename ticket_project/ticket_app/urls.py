@@ -23,6 +23,7 @@ urlpatterns = [
     path('all_tickets/api-<ticket_number>', views.api_get_one_ticket, name='api_one_ticket'),
     path('all_kbs/api-all', views.api_get_all_kbs, name='api_all_kbs'),
     path('all_kbs/api-<kb_id>', views.api_get_one_kb, name='api_one_kb'),
+    path('all_users_xlsx', views.all_users_xlsx, name='all_users_xlsx'),
 
 
 

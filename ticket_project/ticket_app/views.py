@@ -1,3 +1,4 @@
+import xlsxwriter
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
@@ -9,7 +10,6 @@ from django.core.paginator import Paginator
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.views import APIView
 from .serializers import UserSerial, DeviceSerial, TicketSerial, KBSerial
 import re
 
@@ -319,3 +319,35 @@ def api_get_one_kb(request, kb_id):
     kb_articles = KnowledgeArticles.objects.get(pk=kb_id)
     serializer = KBSerial(kb_articles)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@login_required()
+def all_users_xlsx(request):
+    users = Users.objects.filter(is_superuser=0, state="Active")
+    workbook = xlsxwriter.Workbook('users.xlsx')
+    worksheet = workbook.add_worksheet()
+    row = 1
+    col = 0
+    worksheet.write("A1", "ID")
+    worksheet.write("B1", "First name")
+    worksheet.write("C1", "Middle name")
+    worksheet.write("D1", "Last name")
+    worksheet.write("E1", "Username")
+    worksheet.write("F1", "Title")
+    worksheet.write("G1", "SVD")
+    worksheet.write("H1", "E-mail")
+    worksheet.write("I1", "State")
+    for user in users:
+        worksheet.write(row, col, user.id)
+        worksheet.write(row, col + 1, user.first_name)
+        worksheet.write(row, col + 2, user.middle_name)
+        worksheet.write(row, col + 3, user.last_name)
+        worksheet.write(row, col + 4, user.username)
+        worksheet.write(row, col + 5, user.title)
+        worksheet.write(row, col + 6, user.svd)
+        worksheet.write(row, col + 7, user.email)
+        worksheet.write(row, col + 8, user.state)
+        row += 1
+    workbook.close()
+
+    return HttpResponseRedirect("/")
+
