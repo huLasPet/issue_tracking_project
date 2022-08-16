@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 app_name = "ticket_app"
@@ -16,14 +16,15 @@ urlpatterns = [
     path("user/<user_id>", views.userview, name="userview"),
     path("device/<node_id>", views.deviceview, name="deviceview"),
     path('all_users/api-all', views.api_get_all_users, name='api_all_users'),
-    path('all_users/api-<username>', views.api_get_one_user, name='api_one_user'),
+    path(r'all_users/api-one', views.api_get_one_user, name='api_one_user'),
     path('all_devices/api-all', views.api_get_all_devices, name='api_all_devices'),
-    path('all_devices/api-<node_id>', views.api_get_one_device, name='api_one_device'),
+    path('all_devices/api-one', views.api_get_one_device, name='api_one_device'),
     path('all_tickets/api-all', views.api_get_all_tickets, name='api_all_tickets'),
-    path('all_tickets/api-<ticket_number>', views.api_get_one_ticket, name='api_one_ticket'),
+    path('all_tickets/api-one', views.api_get_one_ticket, name='api_one_ticket'),
     path('all_kbs/api-all', views.api_get_all_kbs, name='api_all_kbs'),
-    path('all_kbs/api-<kb_id>', views.api_get_one_kb, name='api_one_kb'),
+    path('all_kbs/api-one', views.api_get_one_kb, name='api_one_kb'),
     path('all_users_xlsx', views.all_users_xlsx, name='all_users_xlsx'),
+    path('api', views.api_view, name='api_view'),
 
 
 

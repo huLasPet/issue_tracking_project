@@ -1,5 +1,5 @@
 import xlsxwriter
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import Users, Tickets, Devices, KnowledgeArticles
@@ -266,6 +266,7 @@ def deviceview(request, node_id):
 
 
 @api_view(('GET',))
+@login_required()
 def api_get_all_users(*args):
     users = Users.objects.all()
     serializer = UserSerial(users, many=True)
@@ -273,13 +274,15 @@ def api_get_all_users(*args):
 
 
 @api_view(('GET',))
-def api_get_one_user(request, username):
-    users = Users.objects.get(username=username)
+@login_required()
+def api_get_one_user(request):
+    users = Users.objects.get(username=request.GET["username"])
     serializer = UserSerial(users)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(('GET',))
+@login_required()
 def api_get_all_devices(*args):
     devices = Devices.objects.all()
     serializer = DeviceSerial(devices, many=True)
@@ -287,13 +290,15 @@ def api_get_all_devices(*args):
 
 
 @api_view(('GET',))
-def api_get_one_device(request, node_id):
-    devices = Devices.objects.get(node_id=node_id)
+@login_required()
+def api_get_one_device(request):
+    devices = Devices.objects.get(node_id=request.GET["node_id"])
     serializer = DeviceSerial(devices)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(('GET',))
+@login_required()
 def api_get_all_tickets(*args):
     tickets = Tickets.objects.all()
     serializer = TicketSerial(tickets, many=True)
@@ -301,13 +306,15 @@ def api_get_all_tickets(*args):
 
 
 @api_view(('GET',))
-def api_get_one_ticket(request, ticket_number):
-    tickets = Tickets.objects.get(pk=ticket_number)
+@login_required()
+def api_get_one_ticket(request):
+    tickets = Tickets.objects.get(pk=request.GET["ticket_number"])
     serializer = TicketSerial(tickets)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(('GET',))
+@login_required()
 def api_get_all_kbs(*args):
     kb_articles = KnowledgeArticles.objects.all()
     serializer = KBSerial(kb_articles, many=True)
@@ -315,10 +322,16 @@ def api_get_all_kbs(*args):
 
 
 @api_view(('GET',))
-def api_get_one_kb(request, kb_id):
-    kb_articles = KnowledgeArticles.objects.get(pk=kb_id)
+@login_required()
+def api_get_one_kb(request):
+    kb_articles = KnowledgeArticles.objects.get(pk=request.GET["kb_id"])
     serializer = KBSerial(kb_articles)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@login_required()
+def api_view(request):
+    return HttpResponseRedirect('https://documenter.getpostman.com/view/19281995/VUjTkPHb')
+
 
 @login_required()
 def all_users_xlsx(request):
@@ -348,6 +361,5 @@ def all_users_xlsx(request):
         worksheet.write(row, col + 8, user.state)
         row += 1
     workbook.close()
-
     return HttpResponseRedirect("/")
 
