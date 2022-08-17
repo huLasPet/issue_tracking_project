@@ -328,6 +328,7 @@ def api_get_one_kb(request):
     serializer = KBSerial(kb_articles)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @login_required()
 def api_view(request):
     return HttpResponseRedirect('https://documenter.getpostman.com/view/19281995/VUjTkPHb')
