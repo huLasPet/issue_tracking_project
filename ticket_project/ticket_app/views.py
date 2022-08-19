@@ -362,7 +362,10 @@ def all_users_xlsx(request):
         worksheet.write(row, col + 8, user_xlsx.state)
         row += 1
     workbook.close()
-    return HttpResponseRedirect("/")
+    response = HttpResponse(open("users.xlsx", "rb").read())
+    response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response['Content-Disposition'] = 'attachment; filename=users.xlsx'
+    return response
 
 
 @login_required()
@@ -387,8 +390,10 @@ def all_devices_xlsx(request):
         worksheet.write_datetime(row, col + 5, device_xlsx.warranty)
         row += 1
     workbook.close()
-    return HttpResponseRedirect("/")
-
+    response = HttpResponse(open("devices.xlsx", "rb").read())
+    response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response['Content-Disposition'] = 'attachment; filename=devices.xlsx'
+    return response
 
 @login_required()
 def all_tickets_xlsx(request):
@@ -418,5 +423,8 @@ def all_tickets_xlsx(request):
         worksheet.write_datetime(row, col + 8, ticket_xlsx.opening_date)
         row += 1
     workbook.close()
-    return HttpResponseRedirect("/")
+    response = HttpResponse(open("tickets.xlsx", "rb").read())
+    response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response['Content-Disposition'] = 'attachment; filename=tickets.xlsx'
+    return response
 
