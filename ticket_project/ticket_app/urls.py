@@ -24,6 +24,7 @@ urlpatterns = [
     path('all_kbs/api-all', views.api_get_all_kbs, name='api_all_kbs'),
     path('all_kbs/api-one', views.api_get_one_kb, name='api_one_kb'),
     path('all_users_xlsx', views.all_users_xlsx, name='all_users_xlsx'),
+    path('all_devices_xlsx', views.all_devices_xlsx, name='all_devices_xlsx'),
     path('api', views.api_view, name='api_view'),
 
 

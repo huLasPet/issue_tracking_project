@@ -364,3 +364,27 @@ def all_users_xlsx(request):
     workbook.close()
     return HttpResponseRedirect("/")
 
+
+def all_devices_xlsx(request):
+    devices = Devices.objects.exclude(state="Decommissioned")
+    workbook = xlsxwriter.Workbook('devices.xlsx', {'default_date_format': 'dd/mm/yy', 'remove_timezone': True})
+    worksheet = workbook.add_worksheet()
+    row = 1
+    col = 0
+    worksheet.write("A1", "Node ID")
+    worksheet.write("B1", "Owner")
+    worksheet.write("C1", "Device type")
+    worksheet.write("D1", "State")
+    worksheet.write("E1", "Purchase date")
+    worksheet.write("F1", "Warranty")
+    for device in devices:
+        worksheet.write(row, col, device.node_id)
+        worksheet.write(row, col + 1, device.owner)
+        worksheet.write(row, col + 2, device.device_type)
+        worksheet.write(row, col + 3, device.state)
+        worksheet.write_datetime(row, col + 4, device.purchase_date)
+        worksheet.write_datetime(row, col + 5, device.warranty)
+        row += 1
+    workbook.close()
+    return HttpResponseRedirect("/")
+
