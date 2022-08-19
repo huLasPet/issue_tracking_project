@@ -350,21 +350,22 @@ def all_users_xlsx(request):
     worksheet.write("G1", "SVD")
     worksheet.write("H1", "E-mail")
     worksheet.write("I1", "State")
-    for user in users:
-        worksheet.write(row, col, user.id)
-        worksheet.write(row, col + 1, user.first_name)
-        worksheet.write(row, col + 2, user.middle_name)
-        worksheet.write(row, col + 3, user.last_name)
-        worksheet.write(row, col + 4, user.username)
-        worksheet.write(row, col + 5, user.title)
-        worksheet.write(row, col + 6, user.svd)
-        worksheet.write(row, col + 7, user.email)
-        worksheet.write(row, col + 8, user.state)
+    for user_xlsx in users:
+        worksheet.write(row, col, user_xlsx.id)
+        worksheet.write(row, col + 1, user_xlsx.first_name)
+        worksheet.write(row, col + 2, user_xlsx.middle_name)
+        worksheet.write(row, col + 3, user_xlsx.last_name)
+        worksheet.write(row, col + 4, user_xlsx.username)
+        worksheet.write(row, col + 5, user_xlsx.title)
+        worksheet.write(row, col + 6, user_xlsx.svd)
+        worksheet.write(row, col + 7, user_xlsx.email)
+        worksheet.write(row, col + 8, user_xlsx.state)
         row += 1
     workbook.close()
     return HttpResponseRedirect("/")
 
 
+@login_required()
 def all_devices_xlsx(request):
     devices = Devices.objects.exclude(state="Decommissioned")
     workbook = xlsxwriter.Workbook('devices.xlsx', {'default_date_format': 'dd/mm/yy', 'remove_timezone': True})
@@ -377,13 +378,44 @@ def all_devices_xlsx(request):
     worksheet.write("D1", "State")
     worksheet.write("E1", "Purchase date")
     worksheet.write("F1", "Warranty")
-    for device in devices:
-        worksheet.write(row, col, device.node_id)
-        worksheet.write(row, col + 1, device.owner)
-        worksheet.write(row, col + 2, device.device_type)
-        worksheet.write(row, col + 3, device.state)
-        worksheet.write_datetime(row, col + 4, device.purchase_date)
-        worksheet.write_datetime(row, col + 5, device.warranty)
+    for device_xlsx in devices:
+        worksheet.write(row, col, device_xlsx.node_id)
+        worksheet.write(row, col + 1, device_xlsx.owner)
+        worksheet.write(row, col + 2, device_xlsx.device_type)
+        worksheet.write(row, col + 3, device_xlsx.state)
+        worksheet.write_datetime(row, col + 4, device_xlsx.purchase_date)
+        worksheet.write_datetime(row, col + 5, device_xlsx.warranty)
+        row += 1
+    workbook.close()
+    return HttpResponseRedirect("/")
+
+
+@login_required()
+def all_tickets_xlsx(request):
+    tickets = Tickets.objects.filter(state="Open")
+    workbook = xlsxwriter.Workbook('tickets.xlsx', {'default_date_format': 'dd/mm/yy', 'remove_timezone': True})
+    worksheet = workbook.add_worksheet()
+    row = 1
+    col = 0
+    worksheet.write("A1", "Ticket ID")
+    worksheet.write("B1", "Affected user")
+    worksheet.write("C1", "Affected device")
+    worksheet.write("D1", "Description")
+    worksheet.write("E1", "Priority")
+    worksheet.write("F1", "State")
+    worksheet.write("G1", "Assigned user")
+    worksheet.write("H1", "Assigned SVD")
+    worksheet.write("I1", "Opening date")
+    for ticket_xlsx in tickets:
+        worksheet.write(row, col, ticket_xlsx.id)
+        worksheet.write(row, col + 1, ticket_xlsx.affected_user)
+        worksheet.write(row, col + 2, ticket_xlsx.affected_device)
+        worksheet.write(row, col + 3, ticket_xlsx.description)
+        worksheet.write(row, col + 4, ticket_xlsx.priority)
+        worksheet.write(row, col + 5, ticket_xlsx.state)
+        worksheet.write(row, col + 6, ticket_xlsx.assigned_user)
+        worksheet.write(row, col + 7, ticket_xlsx.assigned_svd)
+        worksheet.write_datetime(row, col + 8, ticket_xlsx.opening_date)
         row += 1
     workbook.close()
     return HttpResponseRedirect("/")
