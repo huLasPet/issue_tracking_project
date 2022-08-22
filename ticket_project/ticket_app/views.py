@@ -1,5 +1,7 @@
+import asyncio
+
 import xlsxwriter
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import Users, Tickets, Devices, KnowledgeArticles
