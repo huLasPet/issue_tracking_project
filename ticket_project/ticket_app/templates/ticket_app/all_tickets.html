@@ -50,6 +50,7 @@
                 {% endif %}
             </span>
         </div>
-<a class="btn btn-outline-dark" href="/all_tickets_xlsx">Download as .xlsx</a>
-
+{% if header_text != 'My open tickets' %}
+    <a class="btn btn-outline-dark" href="/all_tickets_xlsx">Download as .xlsx</a>
+{% endif %}
 {% endblock content %}

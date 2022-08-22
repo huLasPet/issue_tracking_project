@@ -1,5 +1,3 @@
-import asyncio
-
 import xlsxwriter
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
@@ -90,7 +88,7 @@ def my_open_tickets(request):
 
 @login_required
 def all_devices(request):
-    """Shoe all devices that are not in decomissioned state."""
+    """Show all devices that are not in decomissioned state."""
     devices = Devices.objects.exclude(state="Decommissioned")
     page_obj = pagination(request, devices)
     template = loader.get_template('ticket_app/all_devices.html')
@@ -163,8 +161,6 @@ def open_new_ticket(request):
 
 @login_required
 def ticket(request, ticket_id):
-    # Try to add action history, one big string with something static to separate actions and use regex to list them
-    # separately later
     """Open ticket where ticket_id is the Ticket.id from the DB,
     devices are the affected user's devices if there are any, No device otherwise,
     svds are the all the SVDs without duplicates.
