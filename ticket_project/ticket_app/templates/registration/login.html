@@ -1,15 +1,38 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-<h2>Log In</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Log In</button>
-</form>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+
+        <div class="fadeIn first">
+            <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNzUycHQiIGhlaWdodD0iNzUycHQiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDc1MiA3NTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiA8Zz4KICA8cmVjdCB3aWR0aD0iNzUyIiBoZWlnaHQ9Ijc1MiIgZmlsbD0iI2ZmZiIvPgogIDxwYXRoIGQ9Im0zMDcuMzYgNDc1LjUzdjUzLjM0OGgtNTEuMTA5Yy0xNS43NSAwLTI4LjYzNyAxMC4yOTctMjguNjM3IDIyLjg3OXYxNC4wNzRjMCA0Ljg0NzcgMy45NTcgOC44MDQ3IDguODA0NyA4LjgwNDdoMjc5LjE2YzQuODQ3NyAwIDguODA0Ny0zLjk1NyA4LjgwNDctOC44MDQ3di0xNC4wNzRjMC0xMi41ODYtMTIuODg3LTIyLjg3OS0yOC42MzctMjIuODc5aC01MS4xMDV2LTUzLjM0OGgxMTYuMThjMTguNDY5IDAgMzMuNTc4LTE1LjEwOSAzMy41NzgtMzMuNTc4di0yMzFjMC0xOC40NjktMTUuMTA5LTMzLjU3OC0zMy41NzgtMzMuNTc4bC0zNjkuNjMtMC4wMDM5MDZjLTE4LjQ2OSAwLTMzLjU3OCAxNS4xMDktMzMuNTc4IDMzLjU3OHYyMzFjMCAxOC40NjkgMTUuMTA5IDMzLjU3OCAzMy41NzggMzMuNTc4bDExNi4xOCAwLjAwMzkwNnptLTQuNjQ0NS0yNDMuMTFjNDQuMDY2IDAgNzkuNzg5IDM1LjcyMyA3OS43ODkgNzkuNzg5IDAgNDQuMDY2LTM1LjcyMyA3OS43ODktNzkuNzg5IDc5Ljc4OXMtNzkuNzg5LTM1LjcyMy03OS43ODktNzkuNzg5YzAtNDQuMDcgMzUuNzI3LTc5Ljc4OSA3OS43ODktNzkuNzg5em0wIDMyLjEyOWMxNC4wMzEgMCAyNS40MDIgMTEuMzcxIDI1LjQwMiAyNS40MDJzLTExLjM3MSAyNS40MDItMjUuNDAyIDI1LjQwMmMtMTQuMDIzIDAtMjUuNDAyLTExLjM3MS0yNS40MDItMjUuNDAyIDAuMDA3ODEzLTE0LjAzMSAxMS4zNzktMjUuNDAyIDI1LjQwMi0yNS40MDJ6bTAtMTguMDM5YzM2LjI4NSAwIDY1LjY5OSAyOS40MTggNjUuNjk5IDY1LjY5OSAwIDE3LjA1MS02LjQ5NjEgMzIuNTc4LTE3LjE0NSA0NC4yNTQtNS43MDMxLTIxLjQ4NC0yNS4yNzctMzcuMzItNDguNTUxLTM3LjMyLTIzLjI3MyAwLTQyLjg0OCAxNS44NC00OC41NTkgMzcuMzItMTAuNjUyLTExLjY3Ni0xNy4xNDUtMjcuMjA3LTE3LjE0NS00NC4yNTQgMC0zNi4yODUgMjkuNDE4LTY1LjY5OSA2NS42OTktNjUuNjk5em0xMTcuNjcgMTkuMTMzaDkyLjAyM2M0Ljg0NzcgMCA4LjgwNDcgMy45NTcgOC44MDQ3IDguODA0N3YxMC43ODljMCA0Ljg0NzctMy45NTcgOC44MDQ3LTguODA0NyA4LjgwNDdsLTkyLjAyMyAwLjAwMzkwN2MtNC44NDc3IDAtOC44MDQ3LTMuOTU3LTguODA0Ny04LjgwNDd2LTEwLjc4OWMwLTQuODUxNiAzLjk0OTItOC44MDg2IDguODA0Ny04LjgwODZ6bTAgNjQuNzNoOTIuMDIzYzQuODQ3NyAwIDguODA0NyAzLjk1NyA4LjgwNDcgOC44MDQ3djEwLjc4OWMwIDQuODQ3Ny0zLjk1NyA4LjgwNDctOC44MDQ3IDguODA0N2gtOTIuMDIzYy00Ljg0NzcgMC04LjgwNDctMy45NTctOC44MDQ3LTguODA0N3YtMTAuNzg5YzAtNC44NDc3IDMuOTQ5Mi04LjgwNDcgOC44MDQ3LTguODA0N3ptLTIzMC4wNS0xMjQuOTJoMzcxLjMxYzIuNTU4NiAwIDQuNjU2MiAyLjA5NzcgNC42NTYyIDQuNjU2MnYyMDguODZoLTM4MC42MnYtMjA4Ljg2YzAtMi41NjI1IDIuMDkzOC00LjY1NjIgNC42NTYyLTQuNjU2MnoiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPgogPC9nPgo8L3N2Zz4K" id="icon" alt="User Icon" />
+        </div>
+
+        <form method="post">
+        {% csrf_token %}
+        <label for="id_username">Username:</label>
+        <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="200"
+               required="" id="id_username" class="fadeIn second">
+            <br>
+        <label for="id_password">Password:</label>
+        <input type="password" name="password" autocomplete="current-password" required="" id="id_password"
+               class="fadeIn third">
+            <br>
+            <div id="formFooter">
+                <button type="submit">Log In</button>
+            </div>
+        </form>
+
+    </div>
+</div>
 </body>
 </html>
