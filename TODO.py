@@ -4,6 +4,7 @@
 #       like <all_ticket> for all tickets or <one_ticket>/<ticket_number> for just one
 #       https://stackoverflow.com/questions/14351048/django-optional-url-parameters
 #   10. Add option to filter tables on the site
+#   11: Find something that looks good here: https://dribbble.com/
 
 
 #uvicorn ticket_project.asgi:application --reload --host IP
