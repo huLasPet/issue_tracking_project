@@ -10,13 +10,13 @@
         {% if error_message %}
         <p><strong>{{ error_message }}</strong></p>
         {% endif %}
+        <div class="table-responsive">
         <table class="table table-borderless">
             <tbody>
             <tr>
                 <td>First Name:</td>
                 <td><input class="form-control-sm" name="first_name" value="{{ users.first_name }}">
                 </td>
-
                 <td>Middle name:</td>
                 <td><input class="form-control-sm" name="middle_name" value="{{ users.middle_name }}">
                 </td>
@@ -52,8 +52,10 @@
             </tr>
         </table>
         </table>
+        </div>
     </fieldset>
     <input class="btn btn-outline-dark" type="submit" value="Submit">
     </form>
+
 
 {% endblock content %}
