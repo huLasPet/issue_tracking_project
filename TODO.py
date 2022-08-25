@@ -5,6 +5,7 @@
 #       https://stackoverflow.com/questions/14351048/django-optional-url-parameters
 #   10. Add option to filter tables on the site
 #   11: Find something that looks good here: https://dribbble.com/
+#   12. Make it responsive
 
 
 #uvicorn ticket_project.asgi:application --reload --host IP
