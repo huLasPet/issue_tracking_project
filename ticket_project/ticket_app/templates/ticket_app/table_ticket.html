@@ -1,0 +1,113 @@
+{% extends "./base.html" %}
+{% block title %}{{ tickets.id }}{% endblock title %}
+
+{% block content %}
+<form action="{% url 'ticket_app:ticket' tickets.id %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>Ticket number: {{ tickets.id }} - Status: {{ tickets.state }}</h1></legend>
+        {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+        {% endif %}
+        <table class="table table-borderless">
+            <tbody>
+            <tr>
+                <td>Affected user:</td>
+                <td><input class="form-control-sm" list="affected_user_list" name="affected_user"
+                           value="{{ tickets.affected_user }}">
+                    <datalist id="affected_user_list">
+                        {% for user in users %}
+                        <option value={{ user }}>
+                            {% endfor %}
+                    </datalist>
+                </td>
+                <td>Assigned user:</td>
+                <td><input class="form-control-sm" list="assigned_user_list" name="assigned_user"
+                           value="{{ tickets.assigned_user }}">
+                    <datalist id="assigned_user_list">
+                        {% for user in users %}
+                        <option value={{ user }}>
+                            {% endfor %}
+                    </datalist>
+                </td>
+
+            </tr>
+            <tr>
+                <td>Device ID:</td>
+                <td><input class="form-control-sm" list="device_list" name="affected_device"
+                           value="{{ tickets.affected_device }}">
+                    <datalist id="device_list">
+                        {% for device in devices %}
+                        <option value={{ device }}>
+                            {% endfor %}
+                    </datalist>
+                </td>
+                <td>Assigned SVD:</td>
+                <td><input class="form-control-sm" list="assigned_svd_list" name="assigned_svd"
+                           value="{{ tickets.assigned_svd }}">
+                    <datalist id="assigned_svd_list">
+                        {% for svd in svds %}
+                        <option value={{ svd }}>
+                            {% endfor %}
+                    </datalist>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-borderless">
+            <tr>
+                <td>Description:</td>
+                <td><textarea rows="6" cols="126" name="description">{{ tickets.description }}</textarea></td>
+            </tr>
+            <tr>
+                <td>State:</td>
+                <td><select name="state">
+                    {% if tickets.state == "Open" %}
+                    <option value="Open" selected>{{ tickets.state }}</option>
+                    <option value="Closed">Closed</option>
+                    {% else %}
+                    <option value="Closed" selected>{{ tickets.state }}</option>
+                    <option value="Open">Open</option>
+                    {% endif %}
+                </select></td>
+            </tr>
+            <tr>
+                <td>Priority:</td>
+                <td>
+                    <select name="priority">
+                        {% for prio in priority %}
+                        {% if prio  == tickets.priority %}
+                        <option value="{{ tickets.priority }}" selected>{{ tickets.priority }}</option>
+                        {% else %}
+                        <option value="{{ prio }}">{{ prio }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Update notes:</td>
+                <td><textarea cols="126" name="update_note">Enter update here</textarea></td>
+            </tr>
+            <tr>
+                <td>Action history:</td>
+                {% for actions in history %}
+                <tr>
+                <td></td>
+                <td><textarea cols="126" name="actions" disabled>{{ actions }}</textarea></td>
+                </tr>
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+    <input class="btn btn-outline-dark" type="submit" value="Submit">
+</form>
+<div>
+    <br>
+</div>
+
+
+{% endblock content %}
+
+
+
