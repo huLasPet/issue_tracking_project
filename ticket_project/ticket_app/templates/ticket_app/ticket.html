@@ -16,7 +16,7 @@
                     <tr>
                         <td class="centered_field"><h5>Affected user:</h5></td>
                         <td class="centered_field"><input class="form-control-sm" list="affected_user_list" name="affected_user"
-                                   value="{{ tickets.affected_user }}">
+                                   value="{{ tickets.affected_user }}" required>
                             <datalist id="affected_user_list">
                                 {% for user in users %}
                                 <option value={{ user }}>
@@ -70,7 +70,7 @@
                     <tr>
                         <td class="centered_field"><h5>Assigned SVD:</h5></td>
                         <td class="centered_field"><input class="form-control-sm" list="assigned_svd_list" name="assigned_svd"
-                                   value="{{ tickets.assigned_svd }}">
+                                   value="{{ tickets.assigned_svd }}" required>
                             <datalist id="assigned_svd_list">
                                 {% for svd in svds %}
                                 <option value={{ svd }}>

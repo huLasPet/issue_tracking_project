@@ -13,7 +13,7 @@
             <tbody>
             <tr>
                 <td>Affected user:</td>
-                <td><input class="form-control-sm" list="affected_user_list" name="affected_user">
+                <td><input class="form-control-sm" list="affected_user_list" name="affected_user" required>
                     <datalist id="affected_user_list">
                         {% for user in users %}
                         <option value={{ user }}>
@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <td>Device ID:</td>
-                <td><input class="form-control-sm" list="device_list" name="affected_device">
+                <td><input class="form-control-sm" list="device_list" name="affected_device" required>
                     <datalist id="device_list">
                         {% for device in devices %}
                         <option value={{ device }}>
@@ -40,7 +40,7 @@
                     </datalist>
                 </td>
                 <td>Assigned SVD:</td>
-                <td><input class="form-control-sm" list="assigned_svd_list" name="assigned_svd">
+                <td><input class="form-control-sm" list="assigned_svd_list" name="assigned_svd" required>
                     <datalist id="assigned_svd_list">
                         {% for svd in svds %}
                         <option value={{ svd }}>
@@ -52,11 +52,11 @@
         <table class="table table-borderless">
             <tr>
                 <td>Description:</td>
-                <td><textarea rows="6" cols="126" name="description">Describe the problem</textarea></td>
+                <td><textarea rows="6" cols="126" name="description" required>Describe the problem</textarea></td>
             </tr>
             <tr>
                 <td>State:</td>
-                <td><select name="state">
+                <td><select name="state" required>
                     <option value="Open" selected>Open</option>
                     <option value="Closed">Closed</option>
                 </select></td>
@@ -64,7 +64,7 @@
             <tr>
                 <td>Priority:</td>
                 <td>
-                    <select name="priority">
+                    <select name="priority" required>
                         {% for prio in priority %}
                         {% if prio  == tickets.priority %}
                         <option value="{{ tickets.priority }}" selected>{{ tickets.priority }}</option>

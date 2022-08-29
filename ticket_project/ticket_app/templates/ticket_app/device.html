@@ -18,12 +18,12 @@
         </td>
 
         <td>Device type:</td>
-        <td><input class="form-control-sm" name="device_type" value="{{ device.device_type }}">
+        <td><input class="form-control-sm" name="device_type" value="{{ device.device_type }}" required>
         </td>
 
         <td>State:</td>
         <td>
-          <select name="state">
+          <select name="state" required>
             {% for status in state %}
             {% if status  == device.state %}
                 <option value="{{ device.state }}" selected>{{ device.state }}</option>
