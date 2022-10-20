@@ -6,8 +6,9 @@
 .open_table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
   text-align: center;
+  overflow: unset;
 
 }
 
@@ -41,6 +42,48 @@ textarea {
 
 }
 
+.card, .btn, .search, .navbar-toggler, input, select, textarea {
+    box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+}
+
+.step-link {
+    margin-top: 2%;
+}
+
+.card {
+   animation: fadeIn 1s;
+   -webkit-animation: fadeIn 1s;
+   -moz-animation: fadeIn 1s;
+   -o-animation: fadeIn 1s;
+   -ms-animation: fadeIn 1s;
+   transition: transform .2s;
+   }
+@keyframes card {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-moz-keyframes card {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-webkit-keyframes card {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-o-keyframes card {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-ms-keyframes card {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.card:hover {
+  transform: scale(1.1);
+}
 
 
 /* BASIC */

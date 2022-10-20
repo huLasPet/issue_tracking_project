@@ -21,7 +21,7 @@
 
         <form action="{% url 'ticket_app:search_results' search_term='?' %}" method="POST">
             {% csrf_token %}
-            <input class="form-control me-2" name="search" type="text" placeholder="Search...">
+            <input class="form-control me-2 search" name="search" type="text" placeholder="Search...">
         </form>
 
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
