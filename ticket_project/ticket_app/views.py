@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import UserSerial, DeviceSerial, TicketSerial, KBSerial
 import re
+import uvicorn
 
 
 # REMOVE DUPLICATES WHEN ALL VIEWS ARE DONE
@@ -425,4 +426,6 @@ def all_tickets_xlsx(request):
     response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     response['Content-Disposition'] = 'attachment; filename=tickets.xlsx'
     return response
+
+
 
